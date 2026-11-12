@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+defaults:
+  run:
+    working-directory: app
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      PA_CALLBACK_URL: ${{ secrets.PA_CALLBACK_URL }}
+      GH_TOKEN: ${{ github.token }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      PR_BODY: ${{ github.event.pull_request.body }}
+      PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+      PR_URL: ${{ github.event.pull_request.html_url }}
+      COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Determine story reference
+        run: |
+          sty() { grep -oE 'STY-[0-9]+' | head -n1 || true; }
+          story=$(printf '%s' "$PR_TITLE" | sty)
+          [ -n "$story" ] || story=$(printf '%s' "$PR_BODY" | sty)
+          [ -n "$story" ] || story=$(printf '%s' "$PR_BRANCH" | sty)
+          issue=$(printf '%s' "$PR_BODY" | grep -oE '#[0-9]+' | head -n1 | tr -d '#' || true)
+          if [ -z "$story" ] && [ -n "$issue" ]; then
+            story=$(gh api "repos/$GITHUB_REPOSITORY/issues/$issue" --jq .title 2>/dev/null | sty || true)
+          fi
+          echo "Story: ${story:-none}, issue: ${issue:-none}"
+          echo "STORY_REF=$story" >> "$GITHUB_ENV"
+          echo "GITHUB_ISSUE=${issue:-null}" >> "$GITHUB_ENV"
+          echo "APP_VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
+          cat > "$RUNNER_TEMP/notify.sh" <<'SCRIPT'
+          notify() {
+            if [ -z "$PA_CALLBACK_URL" ]; then echo "::notice::PA_CALLBACK_URL is not set, skipping '$1'"; return 0; fi
+            if [ -z "$STORY_REF" ]; then echo "::notice::No STY reference found, skipping '$1'"; return 0; fi
+            payload=$(jq -n --arg storyRef "$STORY_REF" --argjson githubIssue "$GITHUB_ISSUE" --arg event "$1" \
+              --arg prUrl "$PR_URL" --arg commitSha "$COMMIT_SHA" --arg version "$APP_VERSION" \
+              '{storyRef: $storyRef, githubIssue: $githubIssue, event: $event, prUrl: $prUrl,
+                commitSha: $commitSha, version: $version, deployUrl: ""}')
+            curl -sS --fail-with-body --retry 2 -X POST -H 'Content-Type: application/json' \
+              -d "$payload" "$PA_CALLBACK_URL" || echo "::warning::Callback '$1' failed"
+          }
+          SCRIPT
+
+      - name: Notify pr_opened
+        run: source "$RUNNER_TEMP/notify.sh" && notify pr_opened
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run tests
+        id: tests
+        continue-on-error: true
+        run: npm test && npm run test:e2e
+
+      - name: Notify test result
+        env:
+          OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          source "$RUNNER_TEMP/notify.sh"
+          if [ "$OUTCOME" = "success" ]; then notify tests_passed; else notify tests_failed; fi
+
+      - name: Fail when tests failed
+        if: steps.tests.outcome != 'success'
+        run: |
+          echo "::error::Tests failed"
+          exit 1
