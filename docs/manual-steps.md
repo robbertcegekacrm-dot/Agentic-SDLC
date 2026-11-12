@@ -48,7 +48,9 @@ F5/F6 were still off.
 3. **Publish**. Channels → **Microsoft Teams and Microsoft 365 Copilot** → turn on → open the agent in Teams.
 
 ## 7. First deploy of the portal
-GitHub → Actions → **Deploy portal** → Run workflow (main). The portal shows "Release 1.0.6" at
+1. GitHub → repo → Settings → **Pages** → Build and deployment → Source: **GitHub Actions** (was not enabled: the
+   first Deploy portal run failed in `configure-pages` with "Get Pages site failed … Not Found").
+2. GitHub → Actions → **Deploy portal** → Run workflow (main). The portal shows "Release 1.0.6" at
 https://robbertcegekacrm-dot.github.io/Agentic-SDLC/.
 
 ## 8. Smoke test (once)
