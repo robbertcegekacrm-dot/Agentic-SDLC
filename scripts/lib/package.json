@@ -1,0 +1,10 @@
+{
+  "name": "demo-toolkit-lib",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared Dataverse Web API helpers for all demos (auth, metadata, choices and colors, batch, publish, state colors, seed reset)",
+  "type": "commonjs",
+  "dependencies": {
+    "@azure/msal-node": "^2.16.2"
+  }
+}
