@@ -107,7 +107,7 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                 },
                 "parameters": {
-                  "recordId": "00000000-0000-0000-0000-000000000000",
+                  "recordId": "b8ba3d6a-96de-f111-84e8-000d3a5a43e3",
                   "item/requestv2/StoryType": "@{coalesce(triggerOutputs()?['body/_cgk_type_label'], triggerOutputs()?['body/cgk_type@OData.Community.Display.V1.FormattedValue'], '')}",
                   "item/requestv2/Title": "@{triggerOutputs()?['body/cgk_title']}",
                   "item/requestv2/Description": "@{coalesce(triggerOutputs()?['body/cgk_description'], '')}",

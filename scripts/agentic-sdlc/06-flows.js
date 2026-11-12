@@ -407,8 +407,17 @@ async function promptId() {
     const ex = await dv.tryGet(`workflows(${id})?$select=statecode`);
     if (ex) {
       if (ex.statecode === 1) { console.log(`= ${name} is on, not overwritten (turn it off to update)`); continue; }
-      await dv.patch(`workflows(${id})`, body);
-      console.log(`~ ${name}`);
+      try {
+        await dv.patch(`workflows(${id})`, body);
+        console.log(`~ ${name}`);
+      } catch (e) {
+        // Updates are validated against connections and environment variable values (missing until the
+        // manual steps); creates are not. The flow is off and its id is fixed, so recreate it.
+        if (!/XrmEnvironmentVariableAttributeNotFound|XrmConnectionReferenceMissingConnection/.test(e.message)) throw e;
+        await dv.del(`workflows(${id})`);
+        await dv.post('workflows', { workflowid: id, ...body });
+        console.log(`~ ${name} (recreated)`);
+      }
     } else {
       await dv.post('workflows', { workflowid: id, ...body });
       console.log(`+ ${name} (${id})`);
