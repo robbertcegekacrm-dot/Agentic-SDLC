@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{e60004eb-3afc-48ca-8274-db21061c0550}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab name="tab_general" id="{685e40a3-48e7-4be9-bedf-fc5f381c4bb6}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="sec_general" id="{9caf414f-6252-4729-8a82-004c6001a2e3}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Activity" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{6370a057-1699-4933-bdf4-745b41d3c9e2}" showlabel="true">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_name" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3b5e3549-0dbb-442e-baac-35d115676f38}" showlabel="true">
+                        <labels>
+                          <label description="SDLC Story" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_sdlcstory" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cgk_sdlcstory" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{411e56e5-551e-45d9-85df-f61d3c3a7fa9}" showlabel="true">
+                        <labels>
+                          <label description="Agent" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_agent" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_agent" disabled="false" uniqueid="{d27f2240-58f1-4469-93dc-dab9fc8a95ee}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c79b8aa7-907b-4dff-8e6a-ff57ac7a3f91}" showlabel="true">
+                        <labels>
+                          <label description="Outcome" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_outcome" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_outcome" disabled="false" uniqueid="{ed64e0bd-f954-40df-be00-988a8d109744}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8ad10aef-a80e-4647-b2c6-f8d419f4ffdb}" showlabel="true">
+                        <labels>
+                          <label description="Timestamp" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_timestamp" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cgk_timestamp" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{40b98338-ab8c-46a1-afce-3a3f5aeaddc2}" showlabel="true">
+                        <labels>
+                          <label description="Action" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_action" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_action" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="sec_details" id="{fa8a1d19-9caf-4e18-a3de-4b57871ca0a6}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{97440432-6566-464e-9ac5-44a7abe8ea9a}" showlabel="true">
+                        <labels>
+                          <label description="Details" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_details" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cgk_details" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{db797b37-d850-45b7-9815-102f0da4cd66}" celllabelposition="Top" columns="1111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{61739d4a-9ec2-46ad-ae23-081e0db576ea}" showlabel="true">
+              <labels>
+                <label description="Agent" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_agent" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_agent" disabled="false" uniqueid="{896b630a-5366-4f38-ae9f-0d6a0b2ee805}" />
+            </cell>
+            <cell id="{4933b3b7-a5c2-410f-8995-f7841a7428ed}" showlabel="true">
+              <labels>
+                <label description="Outcome" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_outcome" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_outcome" disabled="false" uniqueid="{4a2251d9-5688-49fe-ad19-6c74263d7a39}" />
+            </cell>
+            <cell id="{3aa6561b-792c-4cb9-8edf-99c4dd50bfe0}" showlabel="true">
+              <labels>
+                <label description="Timestamp" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_timestamp" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cgk_timestamp" disabled="false" />
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <controlDescriptions>
+        <controlDescription forControl="{d27f2240-58f1-4469-93dc-dab9fc8a95ee}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_agent</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_agent</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_agent</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_agent</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{ed64e0bd-f954-40df-be00-988a8d109744}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_outcome</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_outcome</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_outcome</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_outcome</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{896b630a-5366-4f38-ae9f-0d6a0b2ee805}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_agent</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_agent</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_agent</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_agent</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{4a2251d9-5688-49fe-ad19-6c74263d7a39}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_outcome</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_outcome</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_outcome</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_outcome</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Agent Activity" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

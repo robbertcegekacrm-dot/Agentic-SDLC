@@ -1,0 +1,11 @@
+<botcomponent schemaname="cgk_IntakeAgent.topic.AskQuestion">
+  <componenttype>9</componenttype>
+  <description>Answers common questions about the customer portal and how stories are delivered.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Ask a question</name>
+  <parentbotid>
+    <schemaname>cgk_IntakeAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

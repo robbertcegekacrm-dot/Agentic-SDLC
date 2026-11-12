@@ -1,0 +1,11 @@
+<botcomponent schemaname="cgk_IntakeAgent.gpt.default">
+  <componenttype>15</componenttype>
+  <description>Helps employees submit feature requests and report issues for the PowerStudios Customer Portal and logs them as SDLC Stories for automatic triage.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Intake Agent</name>
+  <parentbotid>
+    <schemaname>cgk_IntakeAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

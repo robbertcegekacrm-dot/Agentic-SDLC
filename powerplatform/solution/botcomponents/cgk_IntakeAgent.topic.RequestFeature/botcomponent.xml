@@ -1,0 +1,11 @@
+<botcomponent schemaname="cgk_IntakeAgent.topic.RequestFeature">
+  <componenttype>9</componenttype>
+  <description>Logs a feature request or improvement for the PowerStudios Customer Portal as an SDLC story.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Request a feature</name>
+  <parentbotid>
+    <schemaname>cgk_IntakeAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

@@ -1,0 +1,14 @@
+<environmentvariabledefinition schemaname="cgk_GitHubOwner">
+  <defaultvalue>robbertcegekacrm-dot</defaultvalue>
+  <description default="Owner (user or org) of the GitHub repository.">
+    <label description="Owner (user or org) of the GitHub repository." languagecode="1033" />
+  </description>
+  <displayname default="GitHub owner">
+    <label description="GitHub owner" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

@@ -1,0 +1,10 @@
+<bot schemaname="cgk_IntakeAgent">
+  <agentlifecycle>0</agentlifecycle>
+  <authenticationmode>2</authenticationmode>
+  <authenticationtrigger>1</authenticationtrigger>
+  <iscustomizable>0</iscustomizable>
+  <language>1033</language>
+  <name>Intake Agent</name>
+  <runtimeprovider>0</runtimeprovider>
+  <template>kickStartTemplate-1.0.0</template>
+</bot>

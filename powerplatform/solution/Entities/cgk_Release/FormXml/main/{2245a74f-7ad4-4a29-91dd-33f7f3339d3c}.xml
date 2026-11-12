@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{2245a74f-7ad4-4a29-91dd-33f7f3339d3c}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab name="tab_general" id="{ed4efccf-7525-47b9-a441-41d82a084572}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="sec_general" id="{6710c1df-a3ac-4d08-8535-5890aaf342ff}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Release" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{b7f27400-cd2d-4302-94aa-177cd8969525}" showlabel="true">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_name" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b233139a-df4b-4363-bf51-6565d7e61c78}" showlabel="true">
+                        <labels>
+                          <label description="Version" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_version" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_version" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c92a77e3-d369-42fd-bbcf-df419f1ce44f}" showlabel="true">
+                        <labels>
+                          <label description="Environment" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_environment" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_environment" disabled="false" uniqueid="{9870079e-3b26-495d-8041-f138485ba2e2}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{80061cfa-2306-47a5-8083-0f25ef2dd85e}" showlabel="true">
+                        <labels>
+                          <label description="Released on" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_releasedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cgk_releasedon" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6b96a6d1-3834-446c-8850-8d8823576e73}" showlabel="true">
+                        <labels>
+                          <label description="Deployment URL" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_deploymenturl" classid="{71716B6C-711E-476c-8AB8-5D11542BFB47}" datafieldname="cgk_deploymenturl" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{13a30caa-2744-42d3-a478-d82bc7f5e1fb}" showlabel="true">
+                        <labels>
+                          <label description="Commit SHA" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_commitsha" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_commitsha" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="sec_stories" id="{b1edac3c-f082-45a2-9783-2228a0afca14}" showlabel="false" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Stories" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{79ff167a-f442-40ee-b070-423ac238ef8b}" showlabel="true" rowspan="10" colspan="1" auto="false">
+                        <labels>
+                          <label description="SDLC Stories" languagecode="1033" />
+                        </labels>
+                        <control id="sg_stories" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true">
+                          <parameters>
+                            <ViewId>{8a74e76b-95de-f111-84e8-000d3a5a4d3e}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>cgk_sdlcstory_release</RelationshipName>
+                            <TargetEntityType>cgk_sdlcstory</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds />
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId />
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                            <RecordsPerPage>9</RecordsPerPage>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{ed0663e2-3199-4ce1-9921-5fe03984e3f5}" celllabelposition="Top" columns="1111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{5f8a6847-b448-49f4-abda-4db6b7699fdf}" showlabel="true">
+              <labels>
+                <label description="Version" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_version" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_version" disabled="false" />
+            </cell>
+            <cell id="{43e1a1ce-ef52-46d0-8115-cce537fa42c0}" showlabel="true">
+              <labels>
+                <label description="Environment" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_environment" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_environment" disabled="false" uniqueid="{b96a5bf0-31ab-4ff7-875a-29d583451def}" />
+            </cell>
+            <cell id="{941627f3-a99a-4328-b522-ec8ba432cf16}" showlabel="true">
+              <labels>
+                <label description="Released on" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_releasedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cgk_releasedon" disabled="false" />
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <controlDescriptions>
+        <controlDescription forControl="{9870079e-3b26-495d-8041-f138485ba2e2}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_environment</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_environment</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_environment</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_environment</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{b96a5bf0-31ab-4ff7-875a-29d583451def}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_environment</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_environment</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_environment</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_environment</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Release" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

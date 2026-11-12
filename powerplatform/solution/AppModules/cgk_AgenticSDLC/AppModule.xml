@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AppModule>
+  <UniqueName>cgk_AgenticSDLC</UniqueName>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <WebResourceId>953b9fac-1e5e-e611-80d6-00155ded156f</WebResourceId>
+  <OptimizedFor></OptimizedFor>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <FormFactor>1</FormFactor>
+  <ClientType>4</ClientType>
+  <NavigationType>0</NavigationType>
+  <AppModuleComponents>
+    <AppModuleComponent type="1" schemaName="entity" />
+    <AppModuleComponent type="1" schemaName="entity" />
+    <AppModuleComponent type="1" schemaName="entity" />
+    <AppModuleComponent type="26" id="{f9519468-95de-f111-84e8-000d3a5a43e3}" />
+    <AppModuleComponent type="26" id="{fc519468-95de-f111-84e8-000d3a5a43e3}" />
+    <AppModuleComponent type="26" id="{ff519468-95de-f111-84e8-000d3a5a43e3}" />
+    <AppModuleComponent type="26" id="{196a4568-95de-f111-84e8-000d3a5a486d}" />
+    <AppModuleComponent type="26" id="{8356206f-95de-f111-84e8-000d3a5a486d}" />
+    <AppModuleComponent type="26" id="{f9674a67-95de-f111-84e8-000d3a5a4aea}" />
+    <AppModuleComponent type="26" id="{8a74e76b-95de-f111-84e8-000d3a5a4d3e}" />
+    <AppModuleComponent type="26" id="{8f74e76b-95de-f111-84e8-000d3a5a4d3e}" />
+    <AppModuleComponent type="26" id="{34f5da45-4ff7-44a1-83e6-39410e9264c1}" />
+    <AppModuleComponent type="26" id="{0c031341-04a4-4b81-a995-a886b174185f}" />
+    <AppModuleComponent type="26" id="{c506f7f9-711c-4408-84ce-a939daa1a646}" />
+    <AppModuleComponent type="26" id="{64d0d24c-b329-4fc6-b6f6-c69cb32a18de}" />
+    <AppModuleComponent type="26" id="{4cccce1e-f159-4376-bc85-cb159010a008}" />
+    <AppModuleComponent type="26" id="{d375a7b7-e590-42c1-963c-f203a6fb1e39}" />
+    <AppModuleComponent type="60" id="{2245a74f-7ad4-4a29-91dd-33f7f3339d3c}" />
+    <AppModuleComponent type="60" id="{e60004eb-3afc-48ca-8274-db21061c0550}" />
+    <AppModuleComponent type="60" id="{ba7e6e83-23ec-47fc-93a7-e033edb2f6f2}" />
+    <AppModuleComponent type="62" schemaName="cgk_AgenticSDLC" />
+  </AppModuleComponents>
+  <AppModuleRoleMaps>
+    <Role id="{627090ff-40a3-4053-8790-584edc5be201}" />
+    <Role id="{119f245c-3cc8-4b62-b31c-d1a046ced15d}" />
+  </AppModuleRoleMaps>
+  <LocalizedNames>
+    <LocalizedName description="Agentic SDLC" languagecode="1033" />
+  </LocalizedNames>
+  <Descriptions>
+    <Description description="Follow SDLC stories from report to release: triage, autonomous delivery by agents and routing to humans." languagecode="1033" />
+  </Descriptions>
+  <appsettings>
+    <appsetting settingdefinitionid.uniquename="AppChannel">
+      <iscustomizable>1</iscustomizable>
+      <value>1</value>
+    </appsetting>
+    <appsetting settingdefinitionid.uniquename="HeaderAndNavigationRefresh">
+      <iscustomizable>1</iscustomizable>
+      <value>2</value>
+    </appsetting>
+  </appsettings>
+</AppModule>

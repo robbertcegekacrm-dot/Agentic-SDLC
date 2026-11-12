@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.2.26111.129" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26111.129" OrganizationSchemaType="Full" CRMServerServiceabilityVersion="9.2.26111.00134">
+  <SolutionManifest>
+    <UniqueName>AgenticSDLC</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="Agentic SDLC" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Agentic SDLC demo: request to release with agents, fully traceable." languagecode="1033" />
+    </Descriptions>
+    <Version>1.0.0.0</Version>
+    <Managed>0</Managed>
+    <Publisher>
+      <UniqueName>Cegeka</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="Cegeka" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions />
+      <EMailAddress xsi:nil="true"></EMailAddress>
+      <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
+      <CustomizationPrefix>cgk</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>76663</CustomizationOptionValuePrefix>
+      <Addresses />
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="1" schemaName="cgk_agentactivity" behavior="0" />
+      <RootComponent type="1" schemaName="cgk_release" behavior="0" />
+      <RootComponent type="1" schemaName="cgk_sdlcstory" behavior="0" />
+      <RootComponent type="1" schemaName="systemuser" behavior="1" />
+      <RootComponent type="29" id="{35196964-211c-57a5-a561-c5be3df11aa3}" behavior="0" />
+      <RootComponent type="29" id="{4c4a2bf6-3bbe-5198-aa20-dbd538ef8475}" behavior="0" />
+      <RootComponent type="29" id="{6ff26d40-4126-511c-ad3d-eee08b2dfe2f}" behavior="0" />
+      <RootComponent type="29" id="{e7d37f5a-317b-5b12-aa4d-3dad28a06cd0}" behavior="0" />
+      <RootComponent type="29" id="{e9b1bb5f-8cb1-5495-a4f7-d56342cb4c43}" behavior="0" />
+      <RootComponent type="29" id="{f34fc855-d083-5150-a89d-e6cae34e727a}" behavior="0" />
+      <RootComponent type="401" id="{b8ba3d6a-96de-f111-84e8-000d3a5a43e3}" behavior="0" />
+      <RootComponent type="61" schemaName="cgk_/agenticsdlc/story.form.js" behavior="0" />
+      <RootComponent type="62" schemaName="cgk_AgenticSDLC" behavior="0" />
+      <RootComponent type="80" schemaName="cgk_AgenticSDLC" behavior="0" />
+    </RootComponents>
+    <MissingDependencies>
+      <MissingDependency>
+        <Required type="1" schemaName="systemuser" displayName="SystemUser" parentSchemaName="" solution="msdyn_QualityEvaluationAgentAnalytics (9.0.26042.1003)" />
+        <Dependent type="1" schemaName="systemuser" displayName="SystemUser" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)">
+          <package appName="AppModule Web Resources Package" version="2.5">AppModuleWebResources (2.5)</package>
+        </Required>
+        <Dependent type="80" schemaName="cgk_AgenticSDLC" displayName="Agentic SDLC" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Quick Find Active Releases" displayName="Quick Find Active Releases" parentSchemaName="cgk_release" parentDisplayName="Release" id="{082faebe-19b3-42a9-8899-d526a2d72da3}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Releases" displayName="Releases" parentSchemaName="cgk_release" parentDisplayName="Release" id="{0c031341-04a4-4b81-a995-a886b174185f}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Quick Find Active Agent Activities" displayName="Quick Find Active Agent Activities" parentSchemaName="cgk_agentactivity" parentDisplayName="Agent Activity" id="{0cc67b62-0c4f-45b9-ba72-e4d4e7941c01}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Routed to human" displayName="Routed to human" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{196a4568-95de-f111-84e8-000d3a5a486d}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="SDLC Story Lookup View" displayName="SDLC Story Lookup View" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{22635547-f133-4d6e-951a-6d452363cbea}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Release Lookup View" displayName="Release Lookup View" parentSchemaName="cgk_release" parentDisplayName="Release" id="{34106d7f-038d-46ce-93cb-0f900eeafc96}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Agent Activity" displayName="Agent Activity" parentSchemaName="cgk_agentactivity" parentDisplayName="Agent Activity" id="{4cccce1e-f159-4376-bc85-cb159010a008}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Agent Activity Lookup View" displayName="Agent Activity Lookup View" parentSchemaName="cgk_agentactivity" parentDisplayName="Agent Activity" id="{5c800f31-cbab-4feb-ad9c-f9d0e0a0d71e}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Released" displayName="Released" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{8356206f-95de-f111-84e8-000d3a5a486d}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="All stories" displayName="All stories" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{8a74e76b-95de-f111-84e8-000d3a5a4d3e}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Awaiting a human" displayName="Awaiting a human" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{8f74e76b-95de-f111-84e8-000d3a5a4d3e}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Quick Find Active SDLC Stories" displayName="Quick Find Active SDLC Stories" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{9acd9cfc-9f44-41dd-851d-8cccddf77ffa}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="All open" displayName="All open" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{d375a7b7-e590-42c1-963c-f203a6fb1e39}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Autonomous pipeline" displayName="Autonomous pipeline" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{f9519468-95de-f111-84e8-000d3a5a43e3}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="New features" displayName="New features" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{f9674a67-95de-f111-84e8-000d3a5a4aea}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Issues" displayName="Issues" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{fc519468-95de-f111-84e8-000d3a5a43e3}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="Microsoft.PowerApps.PowerAppsOneGrid" displayName="Microsoft.PowerApps.PowerAppsOneGrid" solution="BaseCustomControlsCore (9.0.2611.1008)">
+          <package appName="Base Custom Controls" version="9.0.2611.1008">BaseCustomControlsCore (9.0.2611.1008)</package>
+        </Required>
+        <Dependent type="26" schemaName="Released this week" displayName="Released this week" parentSchemaName="cgk_sdlcstory" parentDisplayName="SDLC Story" id="{ff519468-95de-f111-84e8-000d3a5a43e3}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.FieldControls.OptionSetWrapper" displayName="MscrmControls.FieldControls.OptionSetWrapper" solution="msdyn_ModernCaseManagement (9.0.26085.2008)">
+          <package appName="ServiceExtended" version="9.0.26085.2008">msdyn_ServiceExtendedAnchor (9.0.26085.2008)</package>
+        </Required>
+        <Dependent type="60" displayName="Release" parentDisplayName="Release" id="{2245a74f-7ad4-4a29-91dd-33f7f3339d3c}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.FieldControls.OptionSetWrapper" displayName="MscrmControls.FieldControls.OptionSetWrapper" solution="msdyn_ModernCaseManagement (9.0.26085.2008)">
+          <package appName="ServiceExtended" version="9.0.26085.2008">msdyn_ServiceExtendedAnchor (9.0.26085.2008)</package>
+        </Required>
+        <Dependent type="60" displayName="SDLC Story" parentDisplayName="SDLC Story" id="{ba7e6e83-23ec-47fc-93a7-e033edb2f6f2}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.FieldControls.OptionSetWrapper" displayName="MscrmControls.FieldControls.OptionSetWrapper" solution="msdyn_ModernCaseManagement (9.0.26085.2008)">
+          <package appName="ServiceExtended" version="9.0.26085.2008">msdyn_ServiceExtendedAnchor (9.0.26085.2008)</package>
+        </Required>
+        <Dependent type="60" displayName="Agent Activity" parentDisplayName="Agent Activity" id="{e60004eb-3afc-48ca-8274-db21061c0550}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="SettingDefinition" displayName="AppChannel" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.27)" id.uniquename="AppChannel">
+          <package appName="PowerAppsAppFramework Package" version="1.0.0.28">PowerAppsAppFramework_Anchor (1.0.0.28)</package>
+        </Required>
+        <Dependent type="AppSetting" displayName="parentappmoduleid.uniquename=cgk_AgenticSDLC,settingdefinitionid.uniquename=AppChannel" id.parentappmoduleid.uniquename="cgk_AgenticSDLC" id.settingdefinitionid.uniquename="AppChannel" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="SettingDefinition" displayName="HeaderAndNavigationRefresh" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.27)" id.uniquename="HeaderAndNavigationRefresh">
+          <package appName="PowerAppsAppFramework Package" version="1.0.0.28">PowerAppsAppFramework_Anchor (1.0.0.28)</package>
+        </Required>
+        <Dependent type="AppSetting" displayName="parentappmoduleid.uniquename=cgk_AgenticSDLC,settingdefinitionid.uniquename=HeaderAndNavigationRefresh" id.parentappmoduleid.uniquename="cgk_AgenticSDLC" id.settingdefinitionid.uniquename="HeaderAndNavigationRefresh" />
+      </MissingDependency>
+    </MissingDependencies>
+  </SolutionManifest>
+</ImportExportXml>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="business_unit_cgk_agentactivity" />
+  <EntityRelationship Name="business_unit_cgk_release" />
+  <EntityRelationship Name="business_unit_cgk_sdlcstory" />
+  <EntityRelationship Name="cgk_agentactivity_sdlcstory" />
+  <EntityRelationship Name="cgk_sdlcstory_possibleduplicateof" />
+  <EntityRelationship Name="cgk_sdlcstory_release" />
+  <EntityRelationship Name="cgk_sdlcstory_reportedby_systemuser" />
+  <EntityRelationship Name="lk_cgk_agentactivity_createdby" />
+  <EntityRelationship Name="lk_cgk_agentactivity_modifiedby" />
+  <EntityRelationship Name="lk_cgk_release_createdby" />
+  <EntityRelationship Name="lk_cgk_release_modifiedby" />
+  <EntityRelationship Name="lk_cgk_sdlcstory_createdby" />
+  <EntityRelationship Name="lk_cgk_sdlcstory_modifiedby" />
+  <EntityRelationship Name="owner_cgk_agentactivity" />
+  <EntityRelationship Name="owner_cgk_release" />
+  <EntityRelationship Name="owner_cgk_sdlcstory" />
+  <EntityRelationship Name="team_cgk_agentactivity" />
+  <EntityRelationship Name="team_cgk_release" />
+  <EntityRelationship Name="team_cgk_sdlcstory" />
+  <EntityRelationship Name="user_cgk_agentactivity" />
+  <EntityRelationship Name="user_cgk_release" />
+  <EntityRelationship Name="user_cgk_sdlcstory" />
+</EntityRelationships>

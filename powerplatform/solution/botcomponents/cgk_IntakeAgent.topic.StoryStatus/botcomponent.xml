@@ -1,0 +1,11 @@
+<botcomponent schemaname="cgk_IntakeAgent.topic.StoryStatus">
+  <componenttype>9</componenttype>
+  <description>Answers the status of an SDLC story (status, delivery path, pull request and release).</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Story status</name>
+  <parentbotid>
+    <schemaname>cgk_IntakeAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

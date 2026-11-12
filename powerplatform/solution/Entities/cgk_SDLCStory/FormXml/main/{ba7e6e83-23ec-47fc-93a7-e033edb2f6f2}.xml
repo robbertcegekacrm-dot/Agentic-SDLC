@@ -1,0 +1,786 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{ba7e6e83-23ec-47fc-93a7-e033edb2f6f2}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab name="tab_summary" id="{bbe3c3e7-fcfc-48a7-9281-b959c06f18ce}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="Summary" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="sec_story" id="{0f8af61f-6e0f-46f9-9387-fb300caf3411}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Story" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{412acb89-b654-4aee-bf86-75a2aa30c6d5}" showlabel="true">
+                        <labels>
+                          <label description="Story number" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_storynumber" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_storynumber" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{87c10d1a-1240-4899-b94e-454b7b946528}" showlabel="true">
+                        <labels>
+                          <label description="Title" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_title" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_title" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6ba2055f-d3bf-4977-b53c-2e9f818d295a}" showlabel="true">
+                        <labels>
+                          <label description="Type" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_type" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_type" disabled="false" uniqueid="{24301cd1-0319-4090-90c6-ceaf652cffbf}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5c582021-3f94-4982-a3aa-00da293dc31e}" showlabel="true">
+                        <labels>
+                          <label description="Reported by" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_reportedby" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cgk_reportedby" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0bda12fb-8a3b-474e-b939-0d24da974d1c}" showlabel="true">
+                        <labels>
+                          <label description="Channel" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_channel" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_channel" disabled="false" uniqueid="{f72e51d1-9e4a-4c99-92af-5d392f54003a}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b859ecc2-a0e8-4a42-8b9e-2b3ceb89b3eb}" showlabel="true">
+                        <labels>
+                          <label description="Affected component" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_affectedcomponent" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_affectedcomponent" disabled="false" uniqueid="{9e192b74-7438-4a61-9936-234b077bfd38}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2e62b8b8-bb11-4e1d-877a-d04c24a0c118}" showlabel="true">
+                        <labels>
+                          <label description="Description" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_description" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cgk_description" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="sec_triage_outcome" id="{de23a87f-e8ad-42a5-94d8-b705759cdefa}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Triage outcome" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{72f0e64f-d335-4985-81f7-3f1756829b97}" showlabel="true">
+                        <labels>
+                          <label description="Priority" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_priority" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_priority" disabled="false" uniqueid="{fa6e8fd5-64ff-4a81-a18a-3538939c8fd3}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{87e748ad-2ca7-47a2-abbd-db48706252b3}" showlabel="true">
+                        <labels>
+                          <label description="Complexity" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_complexity" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_complexity" disabled="false" uniqueid="{2e1f4ba0-671e-46b3-b750-265982a3b928}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cf85eb97-533b-47f9-913b-02c686a4b369}" showlabel="true">
+                        <labels>
+                          <label description="Risk" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_risk" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_risk" disabled="false" uniqueid="{d2b6028e-d4c3-4b11-a0b0-976b0a035e44}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1b689af1-b622-4318-8fe7-e6e5795cc371}" showlabel="true">
+                        <labels>
+                          <label description="Triage confidence" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_triageconfidence" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="cgk_triageconfidence" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cd6bf648-222a-4d23-a065-93c55eaae33f}" showlabel="true">
+                        <labels>
+                          <label description="Delivery path" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_deliverypath" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_deliverypath" disabled="false" uniqueid="{4b71442b-a027-47ae-8306-39c1ab7249a9}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{34b58e04-979e-4e82-9ca2-3bd492b97431}" showlabel="true">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="statuscode" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="statuscode" disabled="false" uniqueid="{9a301b4d-3c04-4763-ba43-00e8b91f1cef}" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="sec_activity_summary" id="{93c7b9ec-3ade-4da8-87e1-dc98a2c3d14e}" showlabel="false" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Agent Activity" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5a01f88f-de82-4777-ae3e-a08535b97f61}" showlabel="true" rowspan="6" colspan="1" auto="false">
+                        <labels>
+                          <label description="Agent Activity" languagecode="1033" />
+                        </labels>
+                        <control id="sg_activity_summary" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true">
+                          <parameters>
+                            <ViewId>{4cccce1e-f159-4376-bc85-cb159010a008}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>cgk_agentactivity_sdlcstory</RelationshipName>
+                            <TargetEntityType>cgk_agentactivity</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds />
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId />
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                            <RecordsPerPage>5</RecordsPerPage>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_triage" id="{0a65605f-2c5d-44a3-879d-528492d3d42f}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="Triage" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="sec_report" id="{51892410-c024-4803-af8a-8d2b923e5fc4}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Report" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{098e8f35-e880-4e31-938f-9a05ea11c7d9}" showlabel="true">
+                        <labels>
+                          <label description="Description" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_description" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cgk_description" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{40e0aac5-5864-4b14-9be5-548c8b34050d}" showlabel="true">
+                        <labels>
+                          <label description="Steps to reproduce" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_stepstoreproduce" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cgk_stepstoreproduce" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9ac0da6e-9d6c-4261-8831-0fecd2d317ea}" showlabel="true">
+                        <labels>
+                          <label description="Expected vs actual" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_expectedvsactual" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cgk_expectedvsactual" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="sec_triage" id="{5e469dc6-6ba7-48e7-8dcf-374090253706}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Triage" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{9b0febcb-f541-42f7-a575-72d58a3fce11}" showlabel="true">
+                        <labels>
+                          <label description="Acceptance criteria" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_acceptancecriteria" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cgk_acceptancecriteria" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{eda72b66-3d6b-4fa9-8324-2568234d32be}" showlabel="true">
+                        <labels>
+                          <label description="Triage rationale" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_triagerationale" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="cgk_triagerationale" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{75f12ccc-2285-4741-b6c2-1b15fd4fc24a}" showlabel="true">
+                        <labels>
+                          <label description="Triage confidence" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_triageconfidence" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="cgk_triageconfidence" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{289151f1-eaa6-4fe7-8824-38cc058ec3f2}" showlabel="true">
+                        <labels>
+                          <label description="Possible duplicate of" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_possibleduplicateof" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cgk_possibleduplicateof" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_delivery" id="{e8c4076b-0090-4143-836d-109568883d5b}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="Delivery" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="sec_github" id="{8dcd3a03-60c5-4e31-bce9-af270449d99f}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="GitHub" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{6ab6c63e-b60d-4eda-b5f1-71c148e42d5a}" showlabel="true">
+                        <labels>
+                          <label description="GitHub issue number" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_githubissuenumber" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="cgk_githubissuenumber" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{404674ec-7435-4f7c-809f-34bd72d9f129}" showlabel="true">
+                        <labels>
+                          <label description="GitHub issue URL" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_githubissueurl" classid="{71716B6C-711E-476c-8AB8-5D11542BFB47}" datafieldname="cgk_githubissueurl" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{01007d60-8da1-424a-89f1-68854ef48063}" showlabel="true">
+                        <labels>
+                          <label description="Pull request URL" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_pullrequesturl" classid="{71716B6C-711E-476c-8AB8-5D11542BFB47}" datafieldname="cgk_pullrequesturl" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{82c42980-2a6f-4f7d-b77a-ffa3b6fbea56}" showlabel="true">
+                        <labels>
+                          <label description="Commit SHA" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_commitsha" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="cgk_commitsha" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e70cb4c6-09f8-4e61-ad13-c260f3f71e32}" showlabel="true">
+                        <labels>
+                          <label description="Test result" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_testresult" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_testresult" disabled="false" uniqueid="{5265107d-566f-45f7-89ac-3a08b6545655}" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="sec_release" id="{937c91e8-e359-47d0-b5b0-949ac62ba34d}" showlabel="true" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Release" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{58df0fd3-a73b-4833-b056-f2c254e8ea67}" showlabel="true">
+                        <labels>
+                          <label description="Release" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_release" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="cgk_release" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{22a8db3c-3128-46df-bdb9-87471444b1d5}" showlabel="true">
+                        <labels>
+                          <label description="Resolved on" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_resolvedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="cgk_resolvedon" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c46b6fd4-422d-4153-ae07-84d2a459ba97}" showlabel="true">
+                        <labels>
+                          <label description="Lead time (min)" languagecode="1033" />
+                        </labels>
+                        <control id="cgk_leadtimemin" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="cgk_leadtimemin" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_activity" id="{c506431b-38a9-46e0-a46b-488efe3e2a60}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="Activity" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="sec_activity_all" id="{c84c7725-ceb4-4109-845a-f01bcb090e96}" showlabel="false" showbar="false" IsUserDefined="0" columns="1" labelwidth="140" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Agent Activity" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5c5affac-afc6-45f8-bb8c-c19b9493f406}" showlabel="true" rowspan="14" colspan="1" auto="false">
+                        <labels>
+                          <label description="Agent Activity" languagecode="1033" />
+                        </labels>
+                        <control id="sg_activity_all" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true">
+                          <parameters>
+                            <ViewId>{4cccce1e-f159-4376-bc85-cb159010a008}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>cgk_agentactivity_sdlcstory</RelationshipName>
+                            <TargetEntityType>cgk_agentactivity</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds />
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId />
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                            <RecordsPerPage>13</RecordsPerPage>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <events>
+        <event name="onload" application="false" active="false">
+          <Handlers>
+            <Handler functionName="CgkSdlc.Story.onLoad" libraryName="cgk_/agenticsdlc/story.form.js" handlerUniqueId="{68079f78-fe39-4442-b522-23328a2c4d5f}" enabled="true" parameters="" passExecutionContext="true" />
+          </Handlers>
+        </event>
+        <event name="onchange" application="false" active="false" attribute="cgk_type">
+          <Handlers>
+            <Handler functionName="CgkSdlc.Story.onTypeChange" libraryName="cgk_/agenticsdlc/story.form.js" handlerUniqueId="{dae6fee2-da8d-475f-9649-d117f1b43de2}" enabled="true" parameters="" passExecutionContext="true" />
+          </Handlers>
+        </event>
+      </events>
+      <header id="{64cf7da1-669a-4e33-a20a-bb54910aa21f}" celllabelposition="Top" columns="1111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{69e99592-3a6c-44ae-acc8-7bf916261a83}" showlabel="true">
+              <labels>
+                <label description="Type" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_type" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_type" disabled="false" uniqueid="{9b11b9af-2c70-4c8f-9a72-f18591d35376}" />
+            </cell>
+            <cell id="{845bffdb-6c7d-46b5-aa1b-cd76514f0b66}" showlabel="true">
+              <labels>
+                <label description="Status" languagecode="1033" />
+              </labels>
+              <control id="header_statuscode" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="statuscode" disabled="false" uniqueid="{11a7479e-aea0-49cf-b4e7-d99c5f457b5f}" />
+            </cell>
+            <cell id="{25a24aee-d51a-4eb0-8bed-82b9a4778882}" showlabel="true">
+              <labels>
+                <label description="Priority" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_priority" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_priority" disabled="false" uniqueid="{d8543983-ff76-4dc6-84c4-da9cf8b720ab}" />
+            </cell>
+            <cell id="{6c1921c6-98c4-4762-a3ec-e71a14c5f2a3}" showlabel="true">
+              <labels>
+                <label description="Delivery path" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_deliverypath" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_deliverypath" disabled="false" uniqueid="{afb529ae-807d-42c3-8039-bd1d8dac45fd}" />
+            </cell>
+            <cell id="{a9259e26-ceb8-4af9-af53-2e7cd8c3ab6d}" showlabel="true">
+              <labels>
+                <label description="Test result" languagecode="1033" />
+              </labels>
+              <control id="header_cgk_testresult" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="cgk_testresult" disabled="false" uniqueid="{bfe96ec9-05dc-42e4-9ad6-faaf61264bb7}" />
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <controlDescriptions>
+        <controlDescription forControl="{24301cd1-0319-4090-90c6-ceaf652cffbf}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_type</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_type</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_type</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_type</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{f72e51d1-9e4a-4c99-92af-5d392f54003a}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_channel</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_channel</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_channel</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_channel</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{9e192b74-7438-4a61-9936-234b077bfd38}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_affectedcomponent</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_affectedcomponent</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_affectedcomponent</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_affectedcomponent</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{fa6e8fd5-64ff-4a81-a18a-3538939c8fd3}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_priority</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_priority</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_priority</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_priority</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{2e1f4ba0-671e-46b3-b750-265982a3b928}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_complexity</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_complexity</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_complexity</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_complexity</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{d2b6028e-d4c3-4b11-a0b0-976b0a035e44}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_risk</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_risk</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_risk</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_risk</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{4b71442b-a027-47ae-8306-39c1ab7249a9}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_deliverypath</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_deliverypath</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_deliverypath</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_deliverypath</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{9a301b4d-3c04-4763-ba43-00e8b91f1cef}">
+          <customControl id="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}">
+            <parameters>
+              <datafieldname>statuscode</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">statuscode</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">statuscode</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">statuscode</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{5265107d-566f-45f7-89ac-3a08b6545655}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_testresult</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_testresult</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_testresult</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_testresult</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{9b11b9af-2c70-4c8f-9a72-f18591d35376}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_type</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_type</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_type</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_type</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{11a7479e-aea0-49cf-b4e7-d99c5f457b5f}">
+          <customControl id="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}">
+            <parameters>
+              <datafieldname>statuscode</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">statuscode</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">statuscode</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">statuscode</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{d8543983-ff76-4dc6-84c4-da9cf8b720ab}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_priority</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_priority</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_priority</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_priority</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{afb529ae-807d-42c3-8039-bd1d8dac45fd}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_deliverypath</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_deliverypath</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_deliverypath</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_deliverypath</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{bfe96ec9-05dc-42e4-9ad6-faaf61264bb7}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>cgk_testresult</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_testresult</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_testresult</boundProperty>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.OptionSetWrapper">
+            <parameters>
+              <boundProperty type="OptionSet">cgk_testresult</boundProperty>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
+      <formLibraries>
+        <Library name="cgk_/agenticsdlc/story.form.js" libraryUniqueId="{71ed6195-49e5-420b-a5ae-1bf92ff985a1}" />
+      </formLibraries>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="SDLC Story" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

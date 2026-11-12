@@ -1,0 +1,13 @@
+<environmentvariabledefinition schemaname="cgk_GitHubPAT">
+  <description default="Fine-grained GitHub PAT. Set only as current value in the environment, never as default value.">
+    <label description="Fine-grained GitHub PAT. Set only as current value in the environment, never as default value." languagecode="1033" />
+  </description>
+  <displayname default="GitHub PAT">
+    <label description="GitHub PAT" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

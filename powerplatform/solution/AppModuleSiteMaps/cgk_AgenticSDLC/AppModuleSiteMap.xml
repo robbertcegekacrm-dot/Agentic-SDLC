@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AppModuleSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SiteMapUniqueName>cgk_AgenticSDLC</SiteMapUniqueName>
+  <EnableCollapsibleGroups>False</EnableCollapsibleGroups>
+  <ShowHome>True</ShowHome>
+  <ShowPinned>True</ShowPinned>
+  <ShowRecents>True</ShowRecents>
+  <SiteMap IntroducedVersion="7.0.0.0">
+    <Area Id="area_sdlc" ShowGroups="true">
+      <Titles>
+        <Title LCID="1033" Title="Agentic SDLC" />
+      </Titles>
+      <Group Id="grp_delivery" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Delivery" />
+        </Titles>
+        <SubArea Id="sub_dashboard" ResourceId="SitemapDesigner.NewSubArea" VectorIcon="/_imgs/TableIconsFluentV9/document_one_page_sparkle.svg" Icon="/_imgs/imagestrips/transparent_spacer.gif" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA" GenPageId="f3b77402-c9c2-4c28-abb2-e6cd1efda88d">
+          <Titles>
+            <Title LCID="1033" Title="Dashboard" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="sub_story" Entity="cgk_sdlcstory">
+          <Titles>
+            <Title LCID="1033" Title="SDLC Stories" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="sub_activity" Entity="cgk_agentactivity">
+          <Titles>
+            <Title LCID="1033" Title="Agent Activity" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="sub_release" Entity="cgk_release">
+          <Titles>
+            <Title LCID="1033" Title="Releases" />
+          </Titles>
+        </SubArea>
+      </Group>
+    </Area>
+  </SiteMap>
+  <LocalizedNames>
+    <LocalizedName description="Agentic SDLC" languagecode="1033" />
+  </LocalizedNames>
+</AppModuleSiteMap>

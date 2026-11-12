@@ -1,0 +1,11 @@
+<botcomponent schemaname="cgk_IntakeAgent.topic.ConversationStart">
+  <componenttype>9</componenttype>
+  <description>Greets the user and offers the four things the Intake Agent can do.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Conversation Start</name>
+  <parentbotid>
+    <schemaname>cgk_IntakeAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

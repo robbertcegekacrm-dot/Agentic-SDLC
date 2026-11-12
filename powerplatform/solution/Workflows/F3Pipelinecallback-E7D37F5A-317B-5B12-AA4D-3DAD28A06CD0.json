@@ -1,0 +1,433 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cgk_sdlc_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Portal URL (cgk_PortalUrl)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "cgk_PortalUrl"
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {
+            "triggerAuthenticationType": "All",
+            "method": "POST",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "storyRef": {
+                  "type": "string"
+                },
+                "githubIssue": {},
+                "event": {
+                  "type": "string"
+                },
+                "prUrl": {
+                  "type": "string"
+                },
+                "commitSha": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "deployUrl": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "actions": {
+        "Find_story": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cgk_sdlcstories",
+              "$select": "cgk_sdlcstoryid,cgk_storynumber,createdon",
+              "$filter": "@{concat('cgk_storynumber eq ''', coalesce(triggerBody()?['storyRef'], '-'), '''', if(empty(triggerBody()?['githubIssue']), '', concat(' or cgk_githubissuenumber eq ', string(triggerBody()?['githubIssue']))))}",
+              "$top": 1
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {}
+        },
+        "If_story_found": {
+          "type": "If",
+          "runAfter": {
+            "Find_story": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "greater": [
+              "@length(outputs('Find_story')?['body/value'])",
+              0
+            ]
+          },
+          "actions": {
+            "Switch_event": {
+              "type": "Switch",
+              "expression": "@triggerBody()?['event']",
+              "cases": {
+                "pr_opened": {
+                  "case": "pr_opened",
+                  "actions": {
+                    "PR_update": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_sdlcstories",
+                          "recordId": "@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']}",
+                          "item/cgk_pullrequesturl": "@{triggerBody()?['prUrl']}",
+                          "item/cgk_commitsha": "@{triggerBody()?['commitSha']}",
+                          "item/statuscode": 766630103,
+                          "item/cgk_testresult": 766630001
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    },
+                    "PR_log": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_agentactivities",
+                          "item/cgk_name": "Pull request opened",
+                          "item/cgk_action": "Open pull request",
+                          "item/cgk_agent": 766630002,
+                          "item/cgk_outcome": 766630000,
+                          "item/cgk_details": "Copilot opened @{triggerBody()?['prUrl']}. CI tests are running.",
+                          "item/cgk_timestamp": "@utcNow()",
+                          "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']})"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "PR_update": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "tests_passed": {
+                  "case": "tests_passed",
+                  "actions": {
+                    "Passed_update": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_sdlcstories",
+                          "recordId": "@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']}",
+                          "item/cgk_testresult": 766630002,
+                          "item/statuscode": 766630104,
+                          "item/cgk_commitsha": "@{triggerBody()?['commitSha']}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    },
+                    "Passed_log": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_agentactivities",
+                          "item/cgk_name": "Tests passed",
+                          "item/cgk_action": "Run CI tests",
+                          "item/cgk_agent": 766630003,
+                          "item/cgk_outcome": 766630000,
+                          "item/cgk_details": "Vitest and Playwright smoke tests passed on @{triggerBody()?['commitSha']}. Waiting for release approval.",
+                          "item/cgk_timestamp": "@utcNow()",
+                          "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']})"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Passed_update": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "tests_failed": {
+                  "case": "tests_failed",
+                  "actions": {
+                    "Failed_update": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_sdlcstories",
+                          "recordId": "@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']}",
+                          "item/cgk_testresult": 766630003,
+                          "item/statuscode": 766630102
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    },
+                    "Failed_log": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_agentactivities",
+                          "item/cgk_name": "Tests failed",
+                          "item/cgk_action": "Run CI tests",
+                          "item/cgk_agent": 766630003,
+                          "item/cgk_outcome": 766630001,
+                          "item/cgk_details": "CI tests failed on @{triggerBody()?['commitSha']}. Back to development.",
+                          "item/cgk_timestamp": "@utcNow()",
+                          "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']})"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Failed_update": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "deployed": {
+                  "case": "deployed",
+                  "actions": {
+                    "Find_release": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "ListRecords",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_releases",
+                          "$select": "cgk_releaseid",
+                          "$filter": "cgk_version eq '@{triggerBody()?['version']}'",
+                          "$top": 1
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    },
+                    "If_new_release": {
+                      "type": "If",
+                      "runAfter": {
+                        "Find_release": [
+                          "Succeeded"
+                        ]
+                      },
+                      "expression": {
+                        "equals": [
+                          "@length(outputs('Find_release')?['body/value'])",
+                          0
+                        ]
+                      },
+                      "actions": {
+                        "Create_release": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "CreateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "cgk_releases",
+                              "item/cgk_name": "Release @{triggerBody()?['version']}",
+                              "item/cgk_version": "@{triggerBody()?['version']}",
+                              "item/cgk_environment": 766630000,
+                              "item/cgk_releasedon": "@utcNow()",
+                              "item/cgk_deploymenturl": "@{coalesce(triggerBody()?['deployUrl'], parameters('Portal URL (cgk_PortalUrl)'))}",
+                              "item/cgk_commitsha": "@{triggerBody()?['commitSha']}"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          },
+                          "runAfter": {}
+                        }
+                      },
+                      "else": {
+                        "actions": {}
+                      }
+                    },
+                    "Release_story": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_sdlcstories",
+                          "recordId": "@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']}",
+                          "item/cgk_Release@odata.bind": "cgk_releases(@{if(empty(outputs('Find_release')?['body/value']), outputs('Create_release')?['body/cgk_releaseid'], first(outputs('Find_release')?['body/value'])?['cgk_releaseid'])})",
+                          "item/statecode": 1,
+                          "item/statuscode": 766630105,
+                          "item/cgk_resolvedon": "@utcNow()",
+                          "item/cgk_leadtimemin": "@div(sub(ticks(utcNow()), ticks(first(outputs('Find_story')?['body/value'])?['createdon'])), 600000000)",
+                          "item/cgk_commitsha": "@{triggerBody()?['commitSha']}",
+                          "item/cgk_testresult": 766630002
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "If_new_release": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Release_log": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_agentactivities",
+                          "item/cgk_name": "Deployed in release @{triggerBody()?['version']}",
+                          "item/cgk_action": "Deploy to GitHub Pages",
+                          "item/cgk_agent": 766630004,
+                          "item/cgk_outcome": 766630000,
+                          "item/cgk_details": "Live at @{triggerBody()?['deployUrl']} (release @{triggerBody()?['version']}).",
+                          "item/cgk_timestamp": "@utcNow()",
+                          "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']})"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Release_story": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Notify_reporter": {
+                      "type": "Workflow",
+                      "inputs": {
+                        "host": {
+                          "workflowReferenceName": "6ff26d40-4126-511c-ad3d-eee08b2dfe2f"
+                        },
+                        "body": {
+                          "text": "@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']}",
+                          "text_1": "@{triggerBody()?['version']}",
+                          "text_2": "@{coalesce(triggerBody()?['deployUrl'], parameters('Portal URL (cgk_PortalUrl)'))}"
+                        }
+                      },
+                      "runAfter": {
+                        "Release_log": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "actions": {}
+              }
+            },
+            "Response_ok": {
+              "type": "Response",
+              "kind": "Http",
+              "runAfter": {
+                "Switch_event": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": {
+                "statusCode": 200,
+                "body": {
+                  "status": "ok",
+                  "story": "@{first(outputs('Find_story')?['body/value'])?['cgk_storynumber']}",
+                  "event": "@{triggerBody()?['event']}"
+                }
+              }
+            }
+          },
+          "else": {
+            "actions": {
+              "Response_not_found": {
+                "type": "Response",
+                "kind": "Http",
+                "inputs": {
+                  "statusCode": 404,
+                  "body": {
+                    "status": "story not found",
+                    "storyRef": "@{triggerBody()?['storyRef']}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

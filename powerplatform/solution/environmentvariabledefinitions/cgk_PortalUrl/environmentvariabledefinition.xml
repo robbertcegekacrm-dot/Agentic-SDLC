@@ -1,0 +1,14 @@
+<environmentvariabledefinition schemaname="cgk_PortalUrl">
+  <defaultvalue>https://robbertcegekacrm-dot.github.io/Agentic-SDLC/</defaultvalue>
+  <description default="URL of the PowerStudios Customer Portal on GitHub Pages.">
+    <label description="URL of the PowerStudios Customer Portal on GitHub Pages." languagecode="1033" />
+  </description>
+  <displayname default="Portal URL">
+    <label description="Portal URL" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

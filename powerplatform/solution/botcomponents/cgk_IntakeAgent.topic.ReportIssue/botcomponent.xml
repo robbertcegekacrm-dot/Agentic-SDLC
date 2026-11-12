@@ -1,0 +1,11 @@
+<botcomponent schemaname="cgk_IntakeAgent.topic.ReportIssue">
+  <componenttype>9</componenttype>
+  <description>Logs a bug or problem in the PowerStudios Customer Portal as an SDLC story of type Issue.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Report an issue</name>
+  <parentbotid>
+    <schemaname>cgk_IntakeAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

@@ -1,6 +1,6 @@
 # Agentic SDLC
 
-Status: built locally – Dataverse phases waiting for the Web API login (see Open issues)
+Status: built
 
 ## Briefing
 See [docs/briefing.md](briefing.md) (verbatim source, not duplicated here to keep one source of truth).
@@ -209,7 +209,7 @@ demo data (e.g. STY-1038: Released in 1.0.6, autonomous, 42 min).
 ## Demo data
 - 6 releases 1.0.1–1.0.6 (1.0.6 always within the current week, relative to the seed run date).
 - 25 stories STY-1017…STY-1041, all types and statuses (see `powerplatform/demo-data/stories.json`).
-- 2–7 Agent Activity rows per story (≈ 110), STY-1038 "Wrong date format on invoice page" with the full trail
+- 2–7 Agent Activity rows per story (141), STY-1038 "Wrong date format on invoice page" with the full trail
   Intake → Triage → Build (issue #31, PR #32) → Test → Human approval → Release 1.0.6 (42 min).
 - Autonumber seed set to 1042 afterwards. `--reset` deletes and recreates the demo rows.
 
@@ -250,10 +250,16 @@ summary and activity tab; Autonomous pipeline view; GitHub issue assigned to Cop
   stories are never re-triaged.
 - Intake Agent story creation and status use agent flows F5 and F6 (topic based agent, no generative Dataverse tool).
   Reported by = the Teams user found by UPN (`System.User.PrincipalName`).
-- The Intake Agent is created from code with `pac copilot init` workspace format + `pac copilot push`
-  (briefing said manual; manual path kept as fallback in manual-steps.md).
-- The AI prompt is a manual step (AI Builder prompt creation through the Web API is undocumented); F1 binds it by
-  name when `06-flows.js` is re-run.
+- The Intake Agent is created from code (briefing said manual): template extracted from an existing simple agent,
+  `pac copilot create` in the solution, clone, overlay of `agents/intake-agent`, `pac copilot push`; classic
+  orchestration set on the bot configuration. Publishing stays manual (needs F5/F6 on).
+- The AI prompt is created by code (`06a-prompt.js`): model on the GPT prompt template, trained configuration, run
+  configuration, `PublishAIConfiguration`; prompt text read from `powerplatform/prompts/sdlc-story-triage.md`.
+- Flows are created off. Updates of an existing flow are validated against connections and environment variable
+  values (missing until the manual steps), so `06-flows.js` deletes and recreates a flow (same id) in that case.
+- `systemuser` is in the solution only as a shell (no subcomponents) because of the Reported by lookup; no
+  customization of the standard table.
+- The solution `AgenticSDLC` was created during the run on request (empty unmanaged solution, Cegeka publisher).
 - Option texts in generative page pills use the next darker brand color where the base color fails WCAG AA on its tint.
 - Teams notification (F4) is a Flow bot chat to the reporter.
 - Seed dates are relative to the run date; `05-seed.js --reset` before every demo.
@@ -261,23 +267,20 @@ summary and activity tab; Autonomous pipeline view; GitHub issue assigned to Cop
   `/.github` and `/app/scripts` (the pristine seed copies used by the reset script).
 
 ## Open issues
-1. ~~Solution `AgenticSDLC` did not exist~~ → resolved: created on request (empty unmanaged solution imported with
-   `pac solution import`, publisher Cegeka / `cgk`, verified).
-2. **No Web API token**: the device-code login (build-standards auth) was not completed within its 15 minutes, and
-   reusing pac's token cache was refused as credential access. Dataverse scripts are written and idempotent but not
-   run → manual step 2 (`run-all.sh`).
-3. Not verified against the environment yet (verify on first run): `appaction` field values for the Approve release
-   command (copied at runtime from an existing JS command), `pac copilot push` for a new agent, page id parsing in
-   `03b-dashboard.sh`, flow definitions accepted by Dataverse.
+1. Agent publish returned 409 Conflict (most likely because agent flows F5/F6 are still off) → manual step 6.
+2. Not testable before the manual steps: flow runs (connections, PAT), Copilot assignment over the REST API, the
+   F3 callback from GitHub Actions and the Teams notification → smoke test in manual step 8.
+3. Web API login uses device code (build-standards); reusing pac's token cache was refused as credential access.
 
 ## Run log
 | Phase | Result |
 |---|---|
-| 0 Verify | pac connected to Power Studios @ Cegeka; solution `AgenticSDLC` missing at first, then created on request; Web API login not completed |
-| 1–3 Schema, forms, app | scripts ready, not run (blocked) |
-| 3b Dashboard | `page.tsx` written, `pac model genpage transpile` OK; upload blocked (needs app) |
-| 4 `/app` + workflows | built; `npm run build` OK, Vitest 6/6, Playwright smoke 3/3 with seeded defects |
-| 5 Demo data | data + seed script ready, not run |
-| 6 Flows | F1–F6 definitions generated (`powerplatform/flows`), deploy blocked |
-| 7 Agent | workspace + topics written and YAML-validated; push blocked |
-| 8 Docs | manual-steps.md, demo-script.md, agent-intake.md written |
+| 0 Verify | solution created on request; publisher Cegeka `cgk` / 76663 verified |
+| 1 Schema | 3 tables, 22+6+6 columns, 4 lookups, 9 story status reasons, 4 env vars (PAT without default); colors on all options, state and status read back |
+| 2 Forms, views | 3 default + 8 demo views (grid control, colored options), 3 forms with OptionSet Wrapper, related subgrids, form script; summary column pending (manual) |
+| 3 App | app `cgk_AgenticSDLC`, ValidateApp OK (sitemap warning only), HeaderAndNavigationRefresh = 2 read back, Approve release command, SDLC Dashboard generative page uploaded, in solution, first in sitemap |
+| 4 `/app` + workflows | `npm run build` OK, Vitest 6/6, Playwright 3/3 with seeded defects |
+| 5 Demo data | 6 releases, 25 stories, 141 activities; KPI check: open 3, released 15, autonomous 60%, lead 45 min vs 59 h, awaiting human 6, routed 5, released this week 2; autonumber seed 1042 |
+| 6 Prompt + flows | prompt SDLC Story Triage published by code and in solution; connection references + F1–F6 created (off) |
+| 7 Agent | Intake Agent created in solution, 15 topics + instructions pushed, classic orchestration; publish 409 → manual |
+| 8 Export | solution exported and unpacked to `powerplatform/solution`; no PAT value or token found |

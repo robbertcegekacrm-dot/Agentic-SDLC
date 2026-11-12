@@ -1,0 +1,35 @@
+<appaction uniquename="cgk_sdlcstory_approverelease">
+  <appmoduleid>
+    <uniquename>cgk_AgenticSDLC</uniquename>
+  </appmoduleid>
+  <buttonlabeltext default="Approve release">
+    <label description="Approve release" languagecode="1033" />
+  </buttonlabeltext>
+  <buttontooltipdescription default="Opens the pull request so you can approve and merge it (stories awaiting approval).">
+    <label description="Opens the pull request so you can approve and merge it (stories awaiting approval)." languagecode="1033" />
+  </buttontooltipdescription>
+  <buttontooltiptitle default="Approve release">
+    <label description="Approve release" languagecode="1033" />
+  </buttontooltiptitle>
+  <context>1</context>
+  <contextvalue>cgk_sdlcstory</contextvalue>
+  <fonticon>Checkmark</fonticon>
+  <hidden>0</hidden>
+  <iscustomizable>1</iscustomizable>
+  <isdisabled>0</isdisabled>
+  <isgrouptitlehidden>0</isgrouptitlehidden>
+  <location>0</location>
+  <name>Approve release</name>
+  <onclickeventjavascriptfunctionname>CgkSdlc.Story.approveRelease</onclickeventjavascriptfunctionname>
+  <onclickeventjavascriptparameters>[{"type":2,"value":null}]</onclickeventjavascriptparameters>
+  <onclickeventjavascriptwebresourceid>
+    <webresourceid>ce09436d-95de-f111-84e8-000d3a5a4aea</webresourceid>
+  </onclickeventjavascriptwebresourceid>
+  <onclickeventtype>2</onclickeventtype>
+  <origin>0</origin>
+  <sequence>10.0000000000</sequence>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <type>0</type>
+  <visibilitytype>0</visibilitytype>
+</appaction>

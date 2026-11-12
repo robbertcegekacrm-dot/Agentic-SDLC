@@ -1,0 +1,135 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cgk_sdlc_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "storynumber": {
+                  "type": "string",
+                  "title": "storynumber",
+                  "description": "Story number, e.g. STY-1038 or 1038",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "storynumber"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Find_story": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cgk_sdlcstories",
+              "$select": "cgk_storynumber,cgk_title,statuscode,cgk_deliverypath,cgk_pullrequesturl,_cgk_release_value,cgk_leadtimemin",
+              "$filter": "cgk_storynumber eq '@{if(startsWith(toUpper(trim(coalesce(triggerBody()?['storynumber'], ''))), 'STY-'), toUpper(trim(coalesce(triggerBody()?['storynumber'], ''))), concat('STY-', trim(coalesce(triggerBody()?['storynumber'], ''))))}'",
+              "$top": 1
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {}
+        },
+        "Respond_to_the_agent": {
+          "type": "Response",
+          "kind": "Skills",
+          "runAfter": {
+            "Find_story": [
+              "Succeeded"
+            ]
+          },
+          "inputs": {
+            "statusCode": 200,
+            "body": {
+              "found": "@{if(empty(outputs('Find_story')?['body/value']), 'no', 'yes')}",
+              "storynumber": "@{if(startsWith(toUpper(trim(coalesce(triggerBody()?['storynumber'], ''))), 'STY-'), toUpper(trim(coalesce(triggerBody()?['storynumber'], ''))), concat('STY-', trim(coalesce(triggerBody()?['storynumber'], ''))))}",
+              "title": "@{first(outputs('Find_story')?['body/value'])?['cgk_title']}",
+              "status": "@{coalesce(first(outputs('Find_story')?['body/value'])?['_statuscode_label'], first(outputs('Find_story')?['body/value'])?['statuscode@OData.Community.Display.V1.FormattedValue'], '')}",
+              "deliverypath": "@{coalesce(first(outputs('Find_story')?['body/value'])?['_cgk_deliverypath_label'], first(outputs('Find_story')?['body/value'])?['cgk_deliverypath@OData.Community.Display.V1.FormattedValue'], '')}",
+              "pullrequest": "@{coalesce(first(outputs('Find_story')?['body/value'])?['cgk_pullrequesturl'], 'none yet')}",
+              "release": "@{coalesce(first(outputs('Find_story')?['body/value'])?['_cgk_release_value@OData.Community.Display.V1.FormattedValue'], 'not released yet')}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "found": {
+                  "title": "found",
+                  "type": "string",
+                  "x-ms-dynamically-added": true
+                },
+                "storynumber": {
+                  "title": "storynumber",
+                  "type": "string",
+                  "x-ms-dynamically-added": true
+                },
+                "title": {
+                  "title": "title",
+                  "type": "string",
+                  "x-ms-dynamically-added": true
+                },
+                "status": {
+                  "title": "status",
+                  "type": "string",
+                  "x-ms-dynamically-added": true
+                },
+                "deliverypath": {
+                  "title": "deliverypath",
+                  "type": "string",
+                  "x-ms-dynamically-added": true
+                },
+                "pullrequest": {
+                  "title": "pullrequest",
+                  "type": "string",
+                  "x-ms-dynamically-added": true
+                },
+                "release": {
+                  "title": "release",
+                  "type": "string",
+                  "x-ms-dynamically-added": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

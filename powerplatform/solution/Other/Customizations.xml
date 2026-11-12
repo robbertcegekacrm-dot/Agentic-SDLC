@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26111.129" OrganizationSchemaType="Full" CRMServerServiceabilityVersion="9.2.26111.00134">
+  <Entities />
+  <Roles />
+  <Workflows />
+  <FieldSecurityProfiles />
+  <Templates />
+  <EntityMaps />
+  <EntityRelationships />
+  <OrganizationSettings />
+  <optionsets />
+  <WebResources />
+  <CustomControls />
+  <AppModuleSiteMaps />
+  <AppModules />
+  <EntityDataProviders />
+  <AIModels>
+    <AIModel>
+      <msdyn_aimodelid>{b8ba3d6a-96de-f111-84e8-000d3a5a43e3}</msdyn_aimodelid>
+      <msdyn_name>SDLC Story Triage</msdyn_name>
+      <msdyn_templateid>{edfdb190-3791-45d8-9a6c-8f90a37c278a}</msdyn_templateid>
+      <statecode>1</statecode>
+      <statuscode>1</statuscode>
+      <IsCustomizable>1</IsCustomizable>
+      <msdyn_activerunconfigurationid>{06354ee7-96de-f111-84e8-000d3a5a4aea}</msdyn_activerunconfigurationid>
+      <AIConfigurations>
+        <AIConfiguration>
+          <msdyn_aiconfigurationid>{06354ee7-96de-f111-84e8-000d3a5a4aea}</msdyn_aiconfigurationid>
+          <msdyn_customconfiguration>{"version":"GptDynamicPrompt-2","prompt":[{"type":"literal","text":"You are the Triage Agent for the PowerStudios Customer Portal, a small web app (Vite, vanilla JS) with a home page,\na quote calculator and a login page. Triage the story below and answer with JSON only.\n\nStory\n- Reported type: "},{"type":"inputVariable","id":"StoryType"},{"type":"literal","text":"\n- Title: "},{"type":"inputVariable","id":"Title"},{"type":"literal","text":"\n- Description: "},{"type":"inputVariable","id":"Description"},{"type":"literal","text":"\n- Steps to reproduce: "},{"type":"inputVariable","id":"StepsToReproduce"},{"type":"literal","text":"\n- Expected vs actual: "},{"type":"inputVariable","id":"ExpectedVsActual"},{"type":"literal","text":"\n\nOpen stories (number and title): "},{"type":"inputVariable","id":"OpenStoryTitles"},{"type":"literal","text":"\n\nRules\n- type: one of \"New feature\", \"Issue\", \"Improvement\", \"Change request\", \"Technical debt\", \"Question\".\n  Correct the reported type when it is clearly wrong (for example reported as Issue but it asks for something new = New feature).\n- component: one of \"UI\", \"Calculation\", \"Data\", \"Integration\", \"Authentication\".\n- priority: one of \"Low\", \"Medium\", \"High\", \"Critical\". Wrong amounts shown to customers are at least High.\n- complexity: \"Simple\" only when the change is isolated to one file or function and has no authentication, security or\n  data model impact. Otherwise \"Complex\".\n- risk: \"High\" for anything touching authentication, login, sessions, payments, data deletion or permissions.\n  \"Medium\" for calculation logic used in many places or external integrations. Otherwise \"Low\".\n- confidence: whole number 0-100 for how sure you are about this triage.\n- rationale: 1-2 sentences explaining complexity and risk.\n- duplicateOfTitle: the exact title (without number) of an open story that describes the same thing, or \"\" when none.\n- acceptanceCriteria: 2-4 concrete, testable bullet lines starting with \"- \", including the test to add.\n\nAnswer with exactly this JSON shape:\n{\"type\":\"\",\"component\":\"\",\"priority\":\"\",\"complexity\":\"\",\"risk\":\"\",\"confidence\":0,\"rationale\":\"\",\"duplicateOfTitle\":\"\",\"acceptanceCriteria\":\"\"}"}],"definitions":{"inputs":[{"id":"StoryType","text":"StoryType","type":"text","quickTestValue":""},{"id":"Title","text":"Title","type":"text","quickTestValue":""},{"id":"Description","text":"Description","type":"text","quickTestValue":""},{"id":"StepsToReproduce","text":"StepsToReproduce","type":"text","quickTestValue":""},{"id":"ExpectedVsActual","text":"ExpectedVsActual","type":"text","quickTestValue":""},{"id":"OpenStoryTitles","text":"OpenStoryTitles","type":"text","quickTestValue":""}],"formulas":[],"data":[],"output":{"formats":["text"]}},"modelParameters":{"modelType":"gpt-41-mini","gptParameters":{"temperature":0}},"settings":{"recordRetrievalLimit":30,"shouldPreserveRecordLinks":null,"runtime":null},"code":"","signature":""}</msdyn_customconfiguration>
+          <msdyn_majoriterationnumber>1</msdyn_majoriterationnumber>
+          <msdyn_minoriterationnumber>0</msdyn_minoriterationnumber>
+          <msdyn_name>b8ba3d6a-96de-f111-84e8-000d3a5a43e3_Run</msdyn_name>
+          <msdyn_modelrundataspecification>H4sIAAAAAAAACpWSTWvDMAyG/8rQOZfB2CG39At2WSEJvbuJuglS21gyNJT+9zn1Rkucg3f1++ixJHSFxmK3M+6s5ICOyWgoXwv40NZLbYxstZCMUF5hQ2wHNX6qM0IJUEAl4ujoBXmKGzFubEeLKfuICthbCX+oAcqTGhgLiCWBcaS/4BYeSIYFSXzOEWyQO0d3LNU8hzmyRtBya2q0zvS+W5xuRuRot5ewdsH+wFUnfiLn2oTI0e4t6rjtaVucWudAjlT1PUVmbbTgRVJtlSDPYnH+4V0pxve3P/ttatrLf49tuYs2fpwMcCJN/F2j4qWL2N3Tl984KQ8t/gCWIJaZJQMAAA==</msdyn_modelrundataspecification>
+          <msdyn_type>190690001</msdyn_type>
+          <msdyn_aimodelid>{b8ba3d6a-96de-f111-84e8-000d3a5a43e3}</msdyn_aimodelid>
+          <msdyn_trainedmodelaiconfigurationpareid>{367f5068-96de-f111-84e8-000d3a5a486d}</msdyn_trainedmodelaiconfigurationpareid>
+          <statecode>2</statecode>
+          <statuscode>7</statuscode>
+          <IsCustomizable>1</IsCustomizable>
+          <msdyn_templateversion>1</msdyn_templateversion>
+        </AIConfiguration>
+        <AIConfiguration>
+          <msdyn_aiconfigurationid>{367f5068-96de-f111-84e8-000d3a5a486d}</msdyn_aiconfigurationid>
+          <msdyn_customconfiguration>{"version":"GptDynamicPrompt-2","prompt":[{"type":"literal","text":"You are the Triage Agent for the PowerStudios Customer Portal, a small web app (Vite, vanilla JS) with a home page,\na quote calculator and a login page. Triage the story below and answer with JSON only.\n\nStory\n- Reported type: "},{"type":"inputVariable","id":"StoryType"},{"type":"literal","text":"\n- Title: "},{"type":"inputVariable","id":"Title"},{"type":"literal","text":"\n- Description: "},{"type":"inputVariable","id":"Description"},{"type":"literal","text":"\n- Steps to reproduce: "},{"type":"inputVariable","id":"StepsToReproduce"},{"type":"literal","text":"\n- Expected vs actual: "},{"type":"inputVariable","id":"ExpectedVsActual"},{"type":"literal","text":"\n\nOpen stories (number and title): "},{"type":"inputVariable","id":"OpenStoryTitles"},{"type":"literal","text":"\n\nRules\n- type: one of \"New feature\", \"Issue\", \"Improvement\", \"Change request\", \"Technical debt\", \"Question\".\n  Correct the reported type when it is clearly wrong (for example reported as Issue but it asks for something new = New feature).\n- component: one of \"UI\", \"Calculation\", \"Data\", \"Integration\", \"Authentication\".\n- priority: one of \"Low\", \"Medium\", \"High\", \"Critical\". Wrong amounts shown to customers are at least High.\n- complexity: \"Simple\" only when the change is isolated to one file or function and has no authentication, security or\n  data model impact. Otherwise \"Complex\".\n- risk: \"High\" for anything touching authentication, login, sessions, payments, data deletion or permissions.\n  \"Medium\" for calculation logic used in many places or external integrations. Otherwise \"Low\".\n- confidence: whole number 0-100 for how sure you are about this triage.\n- rationale: 1-2 sentences explaining complexity and risk.\n- duplicateOfTitle: the exact title (without number) of an open story that describes the same thing, or \"\" when none.\n- acceptanceCriteria: 2-4 concrete, testable bullet lines starting with \"- \", including the test to add.\n\nAnswer with exactly this JSON shape:\n{\"type\":\"\",\"component\":\"\",\"priority\":\"\",\"complexity\":\"\",\"risk\":\"\",\"confidence\":0,\"rationale\":\"\",\"duplicateOfTitle\":\"\",\"acceptanceCriteria\":\"\"}"}],"definitions":{"inputs":[{"id":"StoryType","text":"StoryType","type":"text","quickTestValue":""},{"id":"Title","text":"Title","type":"text","quickTestValue":""},{"id":"Description","text":"Description","type":"text","quickTestValue":""},{"id":"StepsToReproduce","text":"StepsToReproduce","type":"text","quickTestValue":""},{"id":"ExpectedVsActual","text":"ExpectedVsActual","type":"text","quickTestValue":""},{"id":"OpenStoryTitles","text":"OpenStoryTitles","type":"text","quickTestValue":""}],"formulas":[],"data":[],"output":{"formats":["text"]}},"modelParameters":{"modelType":"gpt-41-mini","gptParameters":{"temperature":0}},"settings":{"recordRetrievalLimit":30,"shouldPreserveRecordLinks":null,"runtime":null},"code":"","signature":""}</msdyn_customconfiguration>
+          <msdyn_majoriterationnumber>1</msdyn_majoriterationnumber>
+          <msdyn_minoriterationnumber>0</msdyn_minoriterationnumber>
+          <msdyn_modeldata>bee0b21f-93c8-4d6e-bed4-10bd5a78ff90</msdyn_modeldata>
+          <msdyn_name>b8ba3d6a-96de-f111-84e8-000d3a5a43e3_Training</msdyn_name>
+          <msdyn_modelrundataspecification>
+        {
+          "schemaVersion": 2,
+          "input": {},
+          "output": {}
+        }
+      </msdyn_modelrundataspecification>
+          <msdyn_type>190690000</msdyn_type>
+          <msdyn_aimodelid>{b8ba3d6a-96de-f111-84e8-000d3a5a43e3}</msdyn_aimodelid>
+          <statecode>2</statecode>
+          <statuscode>6</statuscode>
+          <IsCustomizable>1</IsCustomizable>
+          <msdyn_templateversion>1</msdyn_templateversion>
+        </AIConfiguration>
+      </AIConfigurations>
+    </AIModel>
+  </AIModels>
+  <connectionreferences>
+    <connectionreference connectionreferencelogicalname="cgk_sdlc_dataverse">
+      <connectionreferencedisplayname>Agentic SDLC – Dataverse</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="cgk_sdlc_teams">
+      <connectionreferencedisplayname>Agentic SDLC – Microsoft Teams</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_teams</connectorid>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+  </connectionreferences>
+  <Languages>
+    <Language>1033</Language>
+  </Languages>
+</ImportExportXml>

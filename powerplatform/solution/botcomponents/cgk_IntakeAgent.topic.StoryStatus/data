@@ -1,0 +1,70 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Story status
+    triggerQueries:
+      - Status of a story
+      - What is the status of STY-1038
+      - Status of my story
+      - Is my bug fixed
+      - Where is my request
+      - Is STY-1042 live
+
+  actions:
+    - kind: Question
+      id: question_number
+      variable: init:Topic.StoryNumberInput
+      prompt: Which story? Give me the number, for example STY-1038.
+      entity: StringPrebuiltEntity
+
+    - kind: InvokeFlowAction
+      id: invokeFlow_status
+      input:
+        binding:
+          storynumber: =Topic.StoryNumberInput
+
+      output:
+        binding:
+          deliverypath: Topic.DeliveryPath
+          found: Topic.Found
+          pullrequest: Topic.PullRequest
+          release: Topic.Release
+          status: Topic.Status
+          storynumber: Topic.StoryNumber
+          title: Topic.Title
+
+      flowId: 35196964-211c-57a5-a561-c5be3df11aa3
+
+    - kind: ConditionGroup
+      id: condition_found
+      conditions:
+        - id: condition_found_yes
+          condition: =Topic.Found = "yes"
+          actions:
+            - kind: SendActivity
+              id: sendCard_status
+              activity:
+                attachments:
+                  - kind: AdaptiveCardTemplate
+                    cardContent: |-
+                      ={
+                        type: "AdaptiveCard",
+                        '$schema': "http://adaptivecards.io/schemas/adaptive-card.json",
+                        version: "1.5",
+                        body: [
+                          { type: "TextBlock", text: Topic.StoryNumber & " · " & Topic.Title, weight: "Bolder", size: "Medium", wrap: true },
+                          { type: "FactSet", facts: [
+                            { title: "Status", value: Topic.Status },
+                            { title: "Delivery path", value: Topic.DeliveryPath },
+                            { title: "Pull request", value: Topic.PullRequest },
+                            { title: "Release", value: Topic.Release }
+                          ]}
+                        ]
+                      }
+
+      elseActions:
+        - kind: SendActivity
+          id: sendMessage_notfound
+          activity: I couldn't find {Topic.StoryNumber}. Check the number and try again.

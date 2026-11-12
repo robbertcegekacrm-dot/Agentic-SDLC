@@ -1,0 +1,398 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cgk_sdlc_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_story_is_created": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "cgk_sdlcstory",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filterexpression": "cgk_triageconfidence eq null"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Triage": {
+          "type": "Scope",
+          "actions": {
+            "Set_status_Triaging": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "cgk_sdlcstories",
+                  "recordId": "@triggerOutputs()?['body/cgk_sdlcstoryid']",
+                  "item/statuscode": 766630100
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "List_open_stories": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "cgk_sdlcstories",
+                  "$select": "cgk_sdlcstoryid,cgk_title,cgk_storynumber",
+                  "$filter": "statecode eq 0 and cgk_sdlcstoryid ne @{triggerOutputs()?['body/cgk_sdlcstoryid']}",
+                  "$top": 50
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Set_status_Triaging": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Open_story_titles": {
+              "type": "Select",
+              "runAfter": {
+                "List_open_stories": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": {
+                "from": "@outputs('List_open_stories')?['body/value']",
+                "select": "@concat(item()?['cgk_storynumber'], ' ', item()?['cgk_title'])"
+              }
+            },
+            "Run_triage_prompt": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "aibuilderpredict_customprompt",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "recordId": "b8ba3d6a-96de-f111-84e8-000d3a5a43e3",
+                  "item/requestv2/StoryType": "@{coalesce(triggerOutputs()?['body/_cgk_type_label'], triggerOutputs()?['body/cgk_type@OData.Community.Display.V1.FormattedValue'], '')}",
+                  "item/requestv2/Title": "@{triggerOutputs()?['body/cgk_title']}",
+                  "item/requestv2/Description": "@{coalesce(triggerOutputs()?['body/cgk_description'], '')}",
+                  "item/requestv2/StepsToReproduce": "@{coalesce(triggerOutputs()?['body/cgk_stepstoreproduce'], '')}",
+                  "item/requestv2/ExpectedVsActual": "@{coalesce(triggerOutputs()?['body/cgk_expectedvsactual'], '')}",
+                  "item/requestv2/OpenStoryTitles": "@{join(body('Open_story_titles'), '; ')}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Open_story_titles": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Triage_result": {
+              "type": "Compose",
+              "runAfter": {
+                "Run_triage_prompt": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": "@json(coalesce(outputs('Run_triage_prompt')?['body/responsev2/predictionOutput/structuredOutput'], outputs('Run_triage_prompt')?['body/responsev2/predictionOutput/text']))"
+            },
+            "Option_values": {
+              "type": "Compose",
+              "runAfter": {
+                "Triage_result": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": {
+                "type": {
+                  "New feature": 766630000,
+                  "Issue": 766630001,
+                  "Improvement": 766630002,
+                  "Change request": 766630003,
+                  "Technical debt": 766630004,
+                  "Question": 766630005
+                },
+                "component": {
+                  "UI": 766630000,
+                  "Calculation": 766630001,
+                  "Data": 766630002,
+                  "Integration": 766630003,
+                  "Authentication": 766630004
+                },
+                "priority": {
+                  "Low": 766630000,
+                  "Medium": 766630001,
+                  "High": 766630002,
+                  "Critical": 766630003
+                },
+                "complexity": {
+                  "Simple": 766630000,
+                  "Complex": 766630001
+                },
+                "risk": {
+                  "Low": 766630000,
+                  "Medium": 766630001,
+                  "High": 766630002
+                }
+              }
+            },
+            "Delivery_path": {
+              "type": "Compose",
+              "runAfter": {
+                "Option_values": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": "@if(and(contains(createArray('Issue','Improvement','New feature'), outputs('Triage_result')?['type']), equals(outputs('Triage_result')?['complexity'], 'Simple'), equals(outputs('Triage_result')?['risk'], 'Low'), greaterOrEquals(int(outputs('Triage_result')?['confidence']), 80)), 'Autonomous', 'Human')"
+            },
+            "Update_story_with_triage": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "cgk_sdlcstories",
+                  "recordId": "@triggerOutputs()?['body/cgk_sdlcstoryid']",
+                  "item/cgk_type": "@outputs('Option_values')?['type']?[outputs('Triage_result')?['type']]",
+                  "item/cgk_affectedcomponent": "@outputs('Option_values')?['component']?[outputs('Triage_result')?['component']]",
+                  "item/cgk_priority": "@outputs('Option_values')?['priority']?[outputs('Triage_result')?['priority']]",
+                  "item/cgk_complexity": "@outputs('Option_values')?['complexity']?[outputs('Triage_result')?['complexity']]",
+                  "item/cgk_risk": "@outputs('Option_values')?['risk']?[outputs('Triage_result')?['risk']]",
+                  "item/cgk_triageconfidence": "@int(outputs('Triage_result')?['confidence'])",
+                  "item/cgk_triagerationale": "@{outputs('Triage_result')?['rationale']}",
+                  "item/cgk_acceptancecriteria": "@{outputs('Triage_result')?['acceptanceCriteria']}",
+                  "item/cgk_deliverypath": "@if(equals(outputs('Delivery_path'), 'Autonomous'), 766630000, 766630001)",
+                  "item/statuscode": 766630101
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Delivery_path": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Find_duplicate": {
+              "type": "Query",
+              "runAfter": {
+                "Update_story_with_triage": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": {
+                "from": "@outputs('List_open_stories')?['body/value']",
+                "where": "@and(not(empty(outputs('Triage_result')?['duplicateOfTitle'])), equals(toLower(item()?['cgk_title']), toLower(string(outputs('Triage_result')?['duplicateOfTitle']))))"
+              }
+            },
+            "If_duplicate": {
+              "type": "If",
+              "runAfter": {
+                "Find_duplicate": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "greater": [
+                  "@length(body('Find_duplicate'))",
+                  0
+                ]
+              },
+              "actions": {
+                "Link_duplicate": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "cgk_sdlcstories",
+                      "recordId": "@triggerOutputs()?['body/cgk_sdlcstoryid']",
+                      "item/cgk_PossibleDuplicateOf@odata.bind": "cgk_sdlcstories(@{first(body('Find_duplicate'))?['cgk_sdlcstoryid']})"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                }
+              },
+              "else": {
+                "actions": {}
+              }
+            },
+            "Log_triage": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "cgk_agentactivities",
+                  "item/cgk_name": "Triage completed",
+                  "item/cgk_action": "Run prompt SDLC Story Triage",
+                  "item/cgk_agent": 766630001,
+                  "item/cgk_outcome": 766630000,
+                  "item/cgk_details": "Type @{outputs('Triage_result')?['type']}, component @{outputs('Triage_result')?['component']}, priority @{outputs('Triage_result')?['priority']}, complexity @{outputs('Triage_result')?['complexity']}, risk @{outputs('Triage_result')?['risk']}, confidence @{outputs('Triage_result')?['confidence']}%. Delivery path: @{outputs('Delivery_path')}.\n@{outputs('Triage_result')?['rationale']}",
+                  "item/cgk_timestamp": "@utcNow()",
+                  "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerOutputs()?['body/cgk_sdlcstoryid']})"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "If_duplicate": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Is_autonomous": {
+              "type": "If",
+              "runAfter": {
+                "Log_triage": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('Delivery_path')",
+                  "Autonomous"
+                ]
+              },
+              "actions": {
+                "Send_to_GitHub": {
+                  "type": "Workflow",
+                  "inputs": {
+                    "host": {
+                      "workflowReferenceName": "f34fc855-d083-5150-a89d-e6cae34e727a"
+                    },
+                    "body": {
+                      "text": "@triggerOutputs()?['body/cgk_sdlcstoryid']"
+                    }
+                  }
+                }
+              },
+              "else": {
+                "actions": {
+                  "Route_to_human": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                      },
+                      "parameters": {
+                        "entityName": "cgk_sdlcstories",
+                        "recordId": "@triggerOutputs()?['body/cgk_sdlcstoryid']",
+                        "item/statecode": 1,
+                        "item/statuscode": 766630106
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    },
+                    "runAfter": {}
+                  },
+                  "Log_routed": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_commondataserviceforapps",
+                        "operationId": "CreateRecord",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                      },
+                      "parameters": {
+                        "entityName": "cgk_agentactivities",
+                        "item/cgk_name": "Routed to human",
+                        "item/cgk_action": "Apply delivery rule",
+                        "item/cgk_agent": 766630005,
+                        "item/cgk_outcome": 766630001,
+                        "item/cgk_details": "Autonomous rule not met (needs type Issue, Improvement or New feature, complexity Simple, risk Low and confidence >= 80). Triage: @{outputs('Triage_result')?['type']}, @{outputs('Triage_result')?['complexity']}, risk @{outputs('Triage_result')?['risk']}, confidence @{outputs('Triage_result')?['confidence']}%.",
+                        "item/cgk_timestamp": "@utcNow()",
+                        "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerOutputs()?['body/cgk_sdlcstoryid']})"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    },
+                    "runAfter": {
+                      "Route_to_human": [
+                        "Succeeded"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {}
+        },
+        "Log_triage_failed": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cgk_agentactivities",
+              "item/cgk_name": "Triage failed",
+              "item/cgk_action": "Run prompt SDLC Story Triage",
+              "item/cgk_agent": 766630001,
+              "item/cgk_outcome": 766630002,
+              "item/cgk_details": "The triage flow failed. Check the flow run history of F1 – Story triage.",
+              "item/cgk_timestamp": "@utcNow()",
+              "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerOutputs()?['body/cgk_sdlcstoryid']})"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Triage": [
+              "Failed",
+              "TimedOut"
+            ]
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

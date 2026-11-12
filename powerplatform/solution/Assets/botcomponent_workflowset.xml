@@ -1,0 +1,11 @@
+<botcomponent_workflowset>
+  <botcomponent_workflow botcomponentid.schemaname="cgk_IntakeAgent.topic.ReportIssue" workflowid.workflowid="4c4a2bf6-3bbe-5198-aa20-dbd538ef8475">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="cgk_IntakeAgent.topic.RequestFeature" workflowid.workflowid="4c4a2bf6-3bbe-5198-aa20-dbd538ef8475">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="cgk_IntakeAgent.topic.StoryStatus" workflowid.workflowid="35196964-211c-57a5-a561-c5be3df11aa3">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+</botcomponent_workflowset>
