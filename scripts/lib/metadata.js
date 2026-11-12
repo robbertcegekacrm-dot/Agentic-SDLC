@@ -141,18 +141,23 @@ function createMetadata(dv, choices = {}) {
     }
   }
 
-  // Environment variable definitions (String) with a default value.
+  // Environment variable definitions (String). Without `value` the definition gets
+  // no default value (secrets such as a PAT: set only as current value, manually).
   async function ensureEnvVar(v) {
     const ex = await dv.get(`environmentvariabledefinitions?$select=environmentvariabledefinitionid,defaultvalue&$filter=schemaname eq '${v.schema}'`);
     if (ex.value.length) {
-      if (ex.value[0].defaultvalue !== v.value) await dv.patch(`environmentvariabledefinitions(${ex.value[0].environmentvariabledefinitionid})`, { defaultvalue: v.value });
+      const id = ex.value[0].environmentvariabledefinitionid;
+      if (v.value === undefined) {
+        if (ex.value[0].defaultvalue) await dv.patch(`environmentvariabledefinitions(${id})`, { defaultvalue: null });
+      } else if (ex.value[0].defaultvalue !== v.value) await dv.patch(`environmentvariabledefinitions(${id})`, { defaultvalue: v.value });
       console.log(`= environment variable ${v.schema}`);
-      return;
+      return id;
     }
-    await dv.post('environmentvariabledefinitions', {
-      schemaname: v.schema, displayname: v.label, description: v.description, type: 100000000, defaultvalue: v.value,
-    });
-    console.log(`+ environment variable ${v.schema}`);
+    const body = { schemaname: v.schema, displayname: v.label, description: v.description, type: 100000000 };
+    if (v.value !== undefined) body.defaultvalue = v.value;
+    const id = (await dv.post('environmentvariabledefinitions', body)).__id;
+    console.log(`+ environment variable ${v.schema}${v.value === undefined ? ' (no default value)' : ''}`);
+    return id;
   }
 
   async function solutionComponentIds() {

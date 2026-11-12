@@ -9,7 +9,9 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const PAC = process.env.PAC || `"${path.join(process.env.LOCALAPPDATA || '', 'Microsoft', 'PowerAppsCLI', 'pac.cmd')}"`;
+const PAC = process.env.PAC || (process.platform === 'win32'
+  ? `"${path.join(process.env.LOCALAPPDATA || '', 'Microsoft', 'PowerAppsCLI', 'pac.cmd')}"`
+  : 'pac');
 const pac = (args) => execSync(`${PAC} ${args}`, { stdio: 'inherit', shell: true });
 
 async function importStateColors(dv, { tables, stateColors, tempName, outDir }) {
