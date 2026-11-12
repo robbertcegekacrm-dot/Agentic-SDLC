@@ -1,0 +1,5 @@
+.token-cache.json
+.claude/settings.local.json
+node_modules/
+dist/
+.env
