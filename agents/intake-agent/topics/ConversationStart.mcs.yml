@@ -1,0 +1,22 @@
+mcs.metadata:
+  componentName: Conversation Start
+  description: Greets the user and offers the four things the Intake Agent can do.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnConversationStart
+  id: main
+  actions:
+    - kind: SendActivity
+      id: sendMessage_welcome
+      activity:
+        text:
+          - Hi, I'm the PowerStudios Intake Agent. I log issues and ideas for the Customer Portal as SDLC stories, so our agents and developers can pick them up.
+        quickReplies:
+          - kind: MessageBack
+            text: Report an issue
+          - kind: MessageBack
+            text: Request a feature
+          - kind: MessageBack
+            text: Status of a story
+          - kind: MessageBack
+            text: Ask a question

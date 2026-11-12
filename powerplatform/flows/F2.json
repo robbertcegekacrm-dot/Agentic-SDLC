@@ -1,0 +1,320 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cgk_sdlc_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "GitHub owner (cgk_GitHubOwner)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "cgk_GitHubOwner"
+          }
+        },
+        "GitHub repo (cgk_GitHubRepo)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "cgk_GitHubRepo"
+          }
+        },
+        "GitHub PAT (cgk_GitHubPAT)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "cgk_GitHubPAT"
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "storyId",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "storyId",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_story": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cgk_sdlcstories",
+              "recordId": "@triggerBody()?['text']",
+              "$select": "cgk_storynumber,cgk_title,cgk_type,cgk_description,cgk_triagerationale,cgk_acceptancecriteria"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {}
+        },
+        "Create_GitHub_issue": {
+          "type": "Http",
+          "runAfter": {
+            "Get_story": [
+              "Succeeded"
+            ]
+          },
+          "runtimeConfiguration": {
+            "secureData": {
+              "properties": [
+                "inputs"
+              ]
+            }
+          },
+          "inputs": {
+            "method": "POST",
+            "uri": "https://api.github.com/repos/@{parameters('GitHub owner (cgk_GitHubOwner)')}/@{parameters('GitHub repo (cgk_GitHubRepo)')}/issues",
+            "headers": {
+              "Accept": "application/vnd.github+json",
+              "Authorization": "Bearer @{parameters('GitHub PAT (cgk_GitHubPAT)')}",
+              "X-GitHub-Api-Version": "2022-11-28",
+              "User-Agent": "agentic-sdlc-demo"
+            },
+            "body": {
+              "title": "[@{outputs('Get_story')?['body/cgk_storynumber']}] @{outputs('Get_story')?['body/cgk_title']}",
+              "body": "**Story:** @{outputs('Get_story')?['body/cgk_storynumber']}  \n**Type:** @{coalesce(outputs('Get_story')?['body/_cgk_type_label'], outputs('Get_story')?['body/cgk_type@OData.Community.Display.V1.FormattedValue'])}\n\n## Description\n@{outputs('Get_story')?['body/cgk_description']}\n\n## Triage rationale\n@{outputs('Get_story')?['body/cgk_triagerationale']}\n\n## Acceptance criteria\n@{outputs('Get_story')?['body/cgk_acceptancecriteria']}\n\n---\nInclude @{outputs('Get_story')?['body/cgk_storynumber']} in the PR title. Only change files under /app.",
+              "labels": [
+                "agentic-sdlc"
+              ]
+            }
+          }
+        },
+        "Assign_Copilot": {
+          "type": "Http",
+          "runAfter": {
+            "Create_GitHub_issue": [
+              "Succeeded"
+            ]
+          },
+          "runtimeConfiguration": {
+            "secureData": {
+              "properties": [
+                "inputs"
+              ]
+            }
+          },
+          "inputs": {
+            "method": "POST",
+            "uri": "https://api.github.com/repos/@{parameters('GitHub owner (cgk_GitHubOwner)')}/@{parameters('GitHub repo (cgk_GitHubRepo)')}/issues/@{body('Create_GitHub_issue')?['number']}/assignees",
+            "headers": {
+              "Accept": "application/vnd.github+json",
+              "Authorization": "Bearer @{parameters('GitHub PAT (cgk_GitHubPAT)')}",
+              "X-GitHub-Api-Version": "2022-11-28",
+              "User-Agent": "agentic-sdlc-demo"
+            },
+            "body": {
+              "assignees": [
+                "copilot-swe-agent[bot]"
+              ],
+              "agent_assignment": {
+                "target_repo": "@{parameters('GitHub owner (cgk_GitHubOwner)')}/@{parameters('GitHub repo (cgk_GitHubRepo)')}",
+                "base_branch": "main"
+              }
+            }
+          }
+        },
+        "Update_story": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "UpdateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cgk_sdlcstories",
+              "recordId": "@triggerBody()?['text']",
+              "item/cgk_githubissuenumber": "@body('Create_GitHub_issue')?['number']",
+              "item/cgk_githubissueurl": "@body('Create_GitHub_issue')?['html_url']",
+              "item/cgk_testresult": 766630000,
+              "item/statuscode": 766630102
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Create_GitHub_issue": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Copilot_assigned": {
+          "type": "If",
+          "runAfter": {
+            "Assign_Copilot": [
+              "Succeeded",
+              "Failed",
+              "TimedOut"
+            ],
+            "Update_story": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "and": [
+              {
+                "equals": [
+                  "@outputs('Assign_Copilot')?['statusCode']",
+                  201
+                ]
+              },
+              {
+                "greater": [
+                  "@length(coalesce(body('Assign_Copilot')?['assignees'], json('[]')))",
+                  0
+                ]
+              }
+            ]
+          },
+          "actions": {
+            "Log_build": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "cgk_agentactivities",
+                  "item/cgk_name": "GitHub issue #@{body('Create_GitHub_issue')?['number']} created",
+                  "item/cgk_action": "Create issue and assign Copilot",
+                  "item/cgk_agent": 766630002,
+                  "item/cgk_outcome": 766630000,
+                  "item/cgk_details": "[@{outputs('Get_story')?['body/cgk_storynumber']}] assigned to the Copilot coding agent: @{body('Create_GitHub_issue')?['html_url']}",
+                  "item/cgk_timestamp": "@utcNow()",
+                  "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerBody()?['text']})"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            }
+          },
+          "else": {
+            "actions": {
+              "Log_build_warning": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "host": {
+                    "connectionName": "shared_commondataserviceforapps",
+                    "operationId": "CreateRecord",
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                  },
+                  "parameters": {
+                    "entityName": "cgk_agentactivities",
+                    "item/cgk_name": "GitHub issue #@{body('Create_GitHub_issue')?['number']} created, Copilot not assigned",
+                    "item/cgk_action": "Create issue and assign Copilot",
+                    "item/cgk_agent": 766630002,
+                    "item/cgk_outcome": 766630001,
+                    "item/cgk_details": "Copilot could not be assigned automatically (HTTP @{outputs('Assign_Copilot')?['statusCode']}). Presenter: assign the issue to Copilot in GitHub: @{body('Create_GitHub_issue')?['html_url']}",
+                    "item/cgk_timestamp": "@utcNow()",
+                    "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerBody()?['text']})"
+                  },
+                  "authentication": "@parameters('$authentication')"
+                },
+                "runAfter": {}
+              }
+            }
+          }
+        },
+        "Log_github_failed": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "cgk_agentactivities",
+              "item/cgk_name": "GitHub issue not created",
+              "item/cgk_action": "Create GitHub issue",
+              "item/cgk_agent": 766630002,
+              "item/cgk_outcome": 766630002,
+              "item/cgk_details": "GitHub returned @{outputs('Create_GitHub_issue')?['statusCode']}. Check the GitHub PAT environment variable.",
+              "item/cgk_timestamp": "@utcNow()",
+              "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerBody()?['text']})"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Create_GitHub_issue": [
+              "Failed",
+              "TimedOut"
+            ]
+          }
+        },
+        "Respond": {
+          "type": "Response",
+          "kind": "PowerApp",
+          "runAfter": {
+            "Copilot_assigned": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ],
+            "Log_github_failed": [
+              "Succeeded",
+              "Skipped"
+            ]
+          },
+          "inputs": {
+            "statusCode": 200,
+            "body": {
+              "issuenumber": "@{body('Create_GitHub_issue')?['number']}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "issuenumber": {
+                  "title": "issuenumber",
+                  "type": "string",
+                  "x-ms-dynamically-added": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

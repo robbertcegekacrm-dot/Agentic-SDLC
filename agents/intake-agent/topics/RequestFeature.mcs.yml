@@ -1,0 +1,98 @@
+mcs.metadata:
+  componentName: Request a feature
+  description: Logs a feature request or improvement for the PowerStudios Customer Portal as an SDLC story.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Request a feature
+    triggerQueries:
+      - Request a feature
+      - I have an idea
+      - Can you add a button
+      - Add a print button
+      - Feature request
+      - Suggest an improvement
+      - It would be nice if
+      - New feature for the portal
+
+  actions:
+    - kind: Question
+      id: question_kind
+      variable: init:Topic.Kind
+      prompt: Is this something new, or an improvement of something that already exists?
+      entity:
+        kind: EmbeddedEntity
+        definition:
+          kind: ClosedListEntity
+          items:
+            - id: NewFeature
+              displayName: New feature
+            - id: Improvement
+              displayName: Improvement
+
+    - kind: Question
+      id: question_what
+      variable: init:Topic.Description
+      prompt: What would you like the portal to do?
+      entity: StringPrebuiltEntity
+
+    - kind: Question
+      id: question_why
+      variable: init:Topic.Why
+      prompt: Why is it useful? Who benefits from it?
+      entity: StringPrebuiltEntity
+
+    - kind: SetVariable
+      id: setVariable_type
+      variable: Topic.StoryType
+      value: =If(Topic.Kind = 'cgk_IntakeAgent.topic.RequestFeature.main.question_kind'.Improvement, "Improvement", "New feature")
+
+    - kind: SetVariable
+      id: setVariable_title
+      variable: Topic.Title
+      value: =If(Len(Topic.Description) > 80, Left(Topic.Description, 77) & "...", Topic.Description)
+
+    - kind: InvokeFlowAction
+      id: invokeFlow_createFeature
+      input:
+        binding:
+          storytype: =Topic.StoryType
+          title: =Topic.Title
+          description: =Topic.Description & Char(10) & "Why - " & Topic.Why
+          userprincipalname: =System.User.PrincipalName
+
+      output:
+        binding:
+          storynumber: Topic.StoryNumber
+
+      flowId: 4c4a2bf6-3bbe-5198-aa20-dbd538ef8475
+
+    - kind: SendActivity
+      id: sendCard_confirm
+      activity:
+        attachments:
+          - kind: AdaptiveCardTemplate
+            cardContent: |-
+              ={
+                type: "AdaptiveCard",
+                '$schema': "http://adaptivecards.io/schemas/adaptive-card.json",
+                version: "1.5",
+                body: [
+                  { type: "Container", style: "emphasis", bleed: true, items: [
+                    { type: "TextBlock", text: "Story logged", weight: "Bolder", size: "Medium", color: "Accent" },
+                    { type: "TextBlock", text: Topic.StoryNumber, size: "ExtraLarge", weight: "Bolder", spacing: "None" }
+                  ]},
+                  { type: "FactSet", facts: [
+                    { title: "Type", value: Topic.StoryType },
+                    { title: "Title", value: Topic.Title },
+                    { title: "Channel", value: "Teams" },
+                    { title: "Next step", value: "Triage Agent decides: autonomous or human" }
+                  ]}
+                ]
+              }
+
+    - kind: SendActivity
+      id: sendMessage_next
+      activity: Great idea, logged as **{Topic.StoryNumber}**. The Triage Agent writes acceptance criteria and decides whether agents can build it right away.

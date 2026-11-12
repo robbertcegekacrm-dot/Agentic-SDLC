@@ -1,0 +1,54 @@
+mcs.metadata:
+  componentName: Ask a question
+  description: Answers common questions about the customer portal and how stories are delivered.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Ask a question
+    triggerQueries:
+      - Ask a question
+      - I have a question
+      - How does this work
+      - Who builds my request
+      - How fast is a fix live
+
+  actions:
+    - kind: Question
+      id: question_topic
+      variable: init:Topic.Choice
+      prompt: What would you like to know?
+      entity:
+        kind: EmbeddedEntity
+        definition:
+          kind: ClosedListEntity
+          items:
+            - id: HowItWorks
+              displayName: How does delivery work?
+            - id: HowFast
+              displayName: How fast is a fix live?
+            - id: Other
+              displayName: Something else
+
+    - kind: ConditionGroup
+      id: condition_topic
+      conditions:
+        - id: condition_how
+          condition: =Topic.Choice = 'cgk_IntakeAgent.topic.AskQuestion.main.question_topic'.HowItWorks
+          actions:
+            - kind: SendActivity
+              id: sendMessage_how
+              activity: Every story is triaged by the Triage Agent. Issues, improvements and new features that are simple, low risk and triaged with at least 80% confidence go the autonomous way - the GitHub Copilot coding agent builds it, tests run automatically and a product owner approves the release. Everything else is routed to a developer.
+
+        - id: condition_fast
+          condition: =Topic.Choice = 'cgk_IntakeAgent.topic.AskQuestion.main.question_topic'.HowFast
+          actions:
+            - kind: SendActivity
+              id: sendMessage_fast
+              activity: On the autonomous path a fix is live in about 45 minutes on average (STY-1038 "Wrong date format on invoice page" took 42 minutes). Stories routed to a developer take about 59 hours on average.
+
+      elseActions:
+        - kind: SendActivity
+          id: sendMessage_other
+          activity: I only handle the PowerStudios Customer Portal. Type "Report an issue" or "Request a feature" and I'll log it as a story, or ask "status of STY-xxxx".

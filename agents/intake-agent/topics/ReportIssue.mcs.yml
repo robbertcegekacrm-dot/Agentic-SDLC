@@ -1,0 +1,84 @@
+mcs.metadata:
+  componentName: Report an issue
+  description: Logs a bug or problem in the PowerStudios Customer Portal as an SDLC story of type Issue.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Report an issue
+    triggerQueries:
+      - Report an issue
+      - I found a bug
+      - Something is wrong in the portal
+      - The quote calculator is wrong
+      - The VAT is wrong
+      - I can't log in
+      - My session expires
+      - Error in the customer portal
+      - Report a problem
+
+  actions:
+    - kind: Question
+      id: question_what
+      interruptionPolicy:
+        allowInterruption: true
+      variable: init:Topic.Description
+      prompt: Sorry to hear that. What happened?
+      entity: StringPrebuiltEntity
+
+    - kind: Question
+      id: question_where
+      variable: init:Topic.Steps
+      prompt: Where did it happen (page and what you did), and what did you expect instead?
+      entity: StringPrebuiltEntity
+
+    - kind: SetVariable
+      id: setVariable_title
+      variable: Topic.Title
+      value: =If(Len(Topic.Description) > 80, Left(Topic.Description, 77) & "...", Topic.Description)
+
+    - kind: InvokeFlowAction
+      id: invokeFlow_createIssue
+      input:
+        binding:
+          storytype: Issue
+          title: =Topic.Title
+          description: =Topic.Description
+          steps: =Topic.Steps
+          expected: =Topic.Steps
+          userprincipalname: =System.User.PrincipalName
+
+      output:
+        binding:
+          storynumber: Topic.StoryNumber
+
+      flowId: 4c4a2bf6-3bbe-5198-aa20-dbd538ef8475
+
+    - kind: SendActivity
+      id: sendCard_confirm
+      activity:
+        attachments:
+          - kind: AdaptiveCardTemplate
+            cardContent: |-
+              ={
+                type: "AdaptiveCard",
+                '$schema': "http://adaptivecards.io/schemas/adaptive-card.json",
+                version: "1.5",
+                body: [
+                  { type: "Container", style: "emphasis", bleed: true, items: [
+                    { type: "TextBlock", text: "Story logged", weight: "Bolder", size: "Medium", color: "Accent" },
+                    { type: "TextBlock", text: Topic.StoryNumber, size: "ExtraLarge", weight: "Bolder", spacing: "None" }
+                  ]},
+                  { type: "FactSet", facts: [
+                    { title: "Type", value: "Issue" },
+                    { title: "Title", value: Topic.Title },
+                    { title: "Channel", value: "Teams" },
+                    { title: "Next step", value: "Triage Agent decides: autonomous or human" }
+                  ]}
+                ]
+              }
+
+    - kind: SendActivity
+      id: sendMessage_next
+      activity: Thanks! I logged it as **{Topic.StoryNumber}**. The Triage Agent now checks it. Simple, low-risk fixes are built, tested and released by agents; anything risky goes to a developer. Ask me "status of {Topic.StoryNumber}" any time.
