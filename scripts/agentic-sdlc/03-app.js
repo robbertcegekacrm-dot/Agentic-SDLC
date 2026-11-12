@@ -70,7 +70,7 @@ async function addComponents(appId, sitemapId) {
 async function ensureNavSetting(appId) {
   const def = await dv.get("settingdefinitions?$select=settingdefinitionid,uniquename&$filter=uniquename eq 'HeaderAndNavigationRefresh'");
   const defId = def.value[0].settingdefinitionid;
-  const hr = await dv.get(`appsettings?$select=value,uniquename&$filter=_settingdefinitionid_value eq ${defId} and parentappmoduleid/uniquename eq 'cgk_HRHub'`)
+  const hr = await dv.get(`appsettings?$select=value,uniquename&$filter=_settingdefinitionid_value eq ${defId} and _parentappmoduleid_value eq ${(await dv.get("appmodules?$select=appmoduleid&$filter=uniquename eq 'cgk_HRHub'")).value[0]?.appmoduleid}`)
     .catch(() => ({ value: [] }));
   const value = hr.value[0]?.value || '2';
   console.log(`  HR Hub HeaderAndNavigationRefresh = ${value} (uniquename ${hr.value[0]?.uniquename || 'n/a'})`);
@@ -103,15 +103,15 @@ async function ensureCommand(appId) {
   const sample = await dv.get('appactions?$select=onclickeventtype,location,context,visibilitytype,onclickeventjavascriptparameters&$filter=onclickeventjavascriptfunctionname ne null and location eq 0&$top=1');
   if (!sample.value.length) throw new Error('No JavaScript command found to copy enum values from');
   const s = sample.value[0];
-  const md = await dv.get("EntityDefinitions(LogicalName='cgk_sdlcstory')?$select=MetadataId");
   const wr = await dv.get(`webresourceset?$select=webresourceid&$filter=name eq '${FORM_JS}'`);
   const body = {
     uniquename: uname, name: 'Approve release', buttonlabeltext: 'Approve release', buttontooltiptitle: 'Approve release',
     buttontooltipdescription: 'Opens the pull request so you can approve and merge it (stories awaiting approval).',
-    fonticon: 'CheckmarkCircle', sequence: 10, location: s.location, context: s.context, onclickeventtype: s.onclickeventtype,
-    onclickeventjavascriptfunctionname: 'CgkSdlc.Story.approveRelease', onclickeventjavascriptparameters: '[{"type":5,"value":"PrimaryControl"}]',
-    'onclickeventjavascriptwebresourceid@odata.bind': `/webresourceset(${wr.value[0].webresourceid})`,
-    'contextentity@odata.bind': `/entities(${md.MetadataId})`, 'appmoduleid@odata.bind': `/appmodules(${appId})`,
+    fonticon: 'Checkmark', sequence: 10, location: s.location, context: s.context, onclickeventtype: s.onclickeventtype,
+    onclickeventjavascriptfunctionname: 'CgkSdlc.Story.approveRelease', onclickeventjavascriptparameters: s.onclickeventjavascriptparameters, // [{"type":2}] = PrimaryControl (form context)
+    'OnClickEventJavaScriptWebResourceId@odata.bind': `/webresourceset(${wr.value[0].webresourceid})`,
+    contextvalue: 'cgk_sdlcstory', type: 0, visibilitytype: 0, hidden: false, isdisabled: false,
+    'AppModuleId@odata.bind': `/appmodules(${appId})`,
   };
   const ex = await dv.get(`appactions?$select=appactionid&$filter=uniquename eq '${uname}'`);
   if (ex.value.length) { await dv.patch(`appactions(${ex.value[0].appactionid})`, body); console.log('~ command Approve release'); } else { await dv.post('appactions', body); console.log('+ command Approve release'); }
@@ -123,7 +123,7 @@ async function ensureCommand(appId) {
   const sitemapId = await ensureSitemap(pageId);
   await addComponents(appId, sitemapId);
   const nav = await ensureNavSetting(appId);
-  try { await ensureCommand(appId); } catch (e) { console.log(`! command Approve release failed: ${e.message.slice(0, 300)}`); process.exitCode = 2; }
+  try { await ensureCommand(appId); } catch (e) { console.log(`! command Approve release failed: ${e.message.slice(0, 1400)}`); process.exitCode = 2; }
 
   await dv.post('PublishXml', { ParameterXml: `<importexportxml><appmodules><appmodule>${appId}</appmodule></appmodules><sitemaps><sitemap>${sitemapId}</sitemap></sitemaps></importexportxml>` }, { solution: false, retries: 10 });
   const v = await dv.get(`ValidateApp(AppModuleId=${appId})`);

@@ -1,0 +1,13 @@
+{
+  "story:default": "d375a7b7-e590-42c1-963c-f203a6fb1e39",
+  "activity:default": "4cccce1e-f159-4376-bc85-cb159010a008",
+  "release:default": "0c031341-04a4-4b81-a995-a886b174185f",
+  "story:Autonomous pipeline": "f9519468-95de-f111-84e8-000d3a5a43e3",
+  "story:Routed to human": "196a4568-95de-f111-84e8-000d3a5a486d",
+  "story:New features": "f9674a67-95de-f111-84e8-000d3a5a4aea",
+  "story:Issues": "fc519468-95de-f111-84e8-000d3a5a43e3",
+  "story:Released this week": "ff519468-95de-f111-84e8-000d3a5a43e3",
+  "story:All stories": "8a74e76b-95de-f111-84e8-000d3a5a4d3e",
+  "story:Awaiting a human": "8f74e76b-95de-f111-84e8-000d3a5a4d3e",
+  "story:Released": "8356206f-95de-f111-84e8-000d3a5a486d"
+}
