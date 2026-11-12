@@ -1,6 +1,6 @@
 # Agentic SDLC
 
-Status: built locally – Dataverse phases blocked (see Open issues)
+Status: built locally – Dataverse phases waiting for the Web API login (see Open issues)
 
 ## Briefing
 See [docs/briefing.md](briefing.md) (verbatim source, not duplicated here to keep one source of truth).
@@ -261,9 +261,8 @@ summary and activity tab; Autonomous pipeline view; GitHub issue assigned to Cop
   `/.github` and `/app/scripts` (the pristine seed copies used by the reset script).
 
 ## Open issues
-1. **Solution `AgenticSDLC` does not exist** in the environment (checked with `pac solution list` and a fetch on
-   solution name/unique name). Per the rules the build does not create it. All Dataverse phases (1, 2, 3, 5, 6, 7, 8)
-   are blocked until it exists → manual step 1.
+1. ~~Solution `AgenticSDLC` did not exist~~ → resolved: created on request (empty unmanaged solution imported with
+   `pac solution import`, publisher Cegeka / `cgk`, verified).
 2. **No Web API token**: the device-code login (build-standards auth) was not completed within its 15 minutes, and
    reusing pac's token cache was refused as credential access. Dataverse scripts are written and idempotent but not
    run → manual step 2 (`run-all.sh`).
@@ -274,7 +273,7 @@ summary and activity tab; Autonomous pipeline view; GitHub issue assigned to Cop
 ## Run log
 | Phase | Result |
 |---|---|
-| 0 Verify | pac connected to Power Studios @ Cegeka; solution `AgenticSDLC` **missing**; Web API login not completed |
+| 0 Verify | pac connected to Power Studios @ Cegeka; solution `AgenticSDLC` missing at first, then created on request; Web API login not completed |
 | 1–3 Schema, forms, app | scripts ready, not run (blocked) |
 | 3b Dashboard | `page.tsx` written, `pac model genpage transpile` OK; upload blocked (needs app) |
 | 4 `/app` + workflows | built; `npm run build` OK, Vitest 6/6, Playwright smoke 3/3 with seeded defects |

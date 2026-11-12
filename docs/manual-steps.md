@@ -3,11 +3,8 @@
 Do these in this order. Steps marked **(blocking)** must be done before the build scripts can continue.
 Environment: https://cegekapowerstudios.crm.dynamics.com/ · Solution: Agentic SDLC (`AgenticSDLC`).
 
-## 1. Create the solution (blocking)
-During the build the solution `AgenticSDLC` did **not** exist in the environment (`pac solution list` shows no
-Agentic solution), and the build never creates a solution or publisher.
-1. make.powerapps.com → environment *Power Studios @ Cegeka* → Solutions → New solution.
-2. Display name `Agentic SDLC`, name `AgenticSDLC`, publisher **Cegeka** (prefix `cgk`, option value prefix 76663).
+## 1. Create the solution – done
+Created during the build (empty unmanaged solution `AgenticSDLC`, publisher Cegeka `cgk`).
 
 ## 2. Run the build scripts (blocking, needs an interactive login)
 ```bash
