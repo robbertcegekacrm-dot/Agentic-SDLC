@@ -212,7 +212,7 @@ function renderSummary(form, sent = false) {
     <div class="result">
       ${lines}
       <div class="line subtotal"><span>Subtotal</span><span>${formatEuro(q.subtotal)}</span></div>
-      <div class="line"><span>VAT (16%)</span><span>${formatEuro(q.vat)}</span></div>
+      <div class="line"><span>VAT (21%)</span><span>${formatEuro(q.vat)}</span></div>
       <div class="line total"><span>Total</span><span>${formatEuro(q.total)}</span></div>
     </div>
     ${footer}`;
