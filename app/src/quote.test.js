@@ -18,7 +18,12 @@ describe('calculateQuote', () => {
     expect(VAT_RATE).toBeLessThan(1);
   });
 
-  // When changing the VAT rule, add a test here that asserts the expected rate and amounts.
+  it('uses 18% VAT for the calculated VAT and total', () => {
+    const q = calculateQuote({ product: 'panel', quantity: 10 });
+    expect(VAT_RATE).toBe(0.18);
+    expect(q.vat).toBe(378);
+    expect(q.total).toBe(2478);
+  });
 
   it('treats invalid quantities as zero', () => {
     expect(calculateQuote({ product: 'battery', quantity: 'abc' }).total).toBe(0);
