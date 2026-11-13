@@ -49,13 +49,20 @@
                   "x-ms-content-hint": "TEXT"
                 },
                 "text_1": {
+                  "title": "event (released or routed)",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "event (released or routed)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_2": {
                   "title": "version",
                   "type": "string",
                   "x-ms-dynamically-added": true,
                   "description": "version",
                   "x-ms-content-hint": "TEXT"
                 },
-                "text_2": {
+                "text_3": {
                   "title": "deployUrl",
                   "type": "string",
                   "x-ms-dynamically-added": true,
@@ -65,8 +72,7 @@
               },
               "required": [
                 "text",
-                "text_1",
-                "text_2"
+                "text_1"
               ]
             }
           }
@@ -84,118 +90,149 @@
             "parameters": {
               "entityName": "cgk_sdlcstories",
               "recordId": "@triggerBody()?['text']",
-              "$select": "cgk_storynumber,cgk_title,_cgk_reportedby_value"
+              "$select": "cgk_storynumber,cgk_title,cgk_triagerationale,_cgk_reportedby_value"
             },
             "authentication": "@parameters('$authentication')"
           },
           "runAfter": {}
         },
-        "Get_reporter": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "GetItem",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "parameters": {
-              "entityName": "systemusers",
-              "recordId": "@{outputs('Get_story')?['body/_cgk_reportedby_value']}",
-              "$select": "internalemailaddress,firstname"
-            },
-            "authentication": "@parameters('$authentication')"
-          },
+        "Story": {
+          "type": "InitializeVariable",
           "runAfter": {
             "Get_story": [
               "Succeeded"
             ]
+          },
+          "inputs": {
+            "variables": [
+              {
+                "name": "Story",
+                "type": "string",
+                "value": "<b>@{outputs('Get_story')?['body/cgk_storynumber']}</b> \"@{outputs('Get_story')?['body/cgk_title']}\""
+              }
+            ]
           }
         },
-        "Post_Teams_message": {
-          "type": "OpenApiConnection",
+        "Has_reporter": {
+          "type": "If",
           "runAfter": {
-            "Get_reporter": [
+            "Story": [
               "Succeeded"
             ]
           },
-          "inputs": {
-            "host": {
-              "connectionName": "shared_teams",
-              "operationId": "PostMessageToConversation",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
-            },
-            "parameters": {
-              "poster": "Flow bot",
-              "location": "Chat with Flow bot",
-              "body/recipient": "@{outputs('Get_reporter')?['body/internalemailaddress']}",
-              "body/messageBody": "<p>Hi @{outputs('Get_reporter')?['body/firstname']}, 🚀 <b>@{outputs('Get_story')?['body/cgk_storynumber']}</b> \"@{outputs('Get_story')?['body/cgk_title']}\" is live in release <b>@{triggerBody()?['text_1']}</b>: <a href=\"@{triggerBody()?['text_2']}\">@{triggerBody()?['text_2']}</a></p>"
-            },
-            "authentication": "@parameters('$authentication')"
-          }
-        },
-        "Log_notified": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "CreateRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "parameters": {
-              "entityName": "cgk_agentactivities",
-              "item/cgk_name": "Reporter notified in Teams",
-              "item/cgk_action": "Notify reporter",
-              "item/cgk_agent": 766630004,
-              "item/cgk_outcome": 766630003,
-              "item/cgk_details": "Teams message sent to @{outputs('Get_reporter')?['body/internalemailaddress']}.",
-              "item/cgk_timestamp": "@utcNow()",
-              "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerBody()?['text']})"
-            },
-            "authentication": "@parameters('$authentication')"
+          "expression": {
+            "not": {
+              "equals": [
+                "@coalesce(outputs('Get_story')?['body/_cgk_reportedby_value'], '')",
+                ""
+              ]
+            }
           },
-          "runAfter": {
-            "Post_Teams_message": [
-              "Succeeded"
-            ]
-          }
-        },
-        "Log_notify_failed": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "CreateRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+          "actions": {
+            "Get_reporter": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "GetItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "systemusers",
+                  "recordId": "@{outputs('Get_story')?['body/_cgk_reportedby_value']}",
+                  "$select": "internalemailaddress,firstname"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
             },
-            "parameters": {
-              "entityName": "cgk_agentactivities",
-              "item/cgk_name": "Reporter not notified",
-              "item/cgk_action": "Notify reporter",
-              "item/cgk_agent": 766630004,
-              "item/cgk_outcome": 766630001,
-              "item/cgk_details": "The Teams message could not be sent.",
-              "item/cgk_timestamp": "@utcNow()",
-              "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerBody()?['text']})"
+            "Post_Teams_message": {
+              "type": "OpenApiConnection",
+              "runAfter": {
+                "Get_reporter": [
+                  "Succeeded"
+                ]
+              },
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_teams",
+                  "operationId": "PostMessageToConversation",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+                },
+                "parameters": {
+                  "poster": "Flow bot",
+                  "location": "Chat with Flow bot",
+                  "body/recipient": "@{outputs('Get_reporter')?['body/internalemailaddress']}",
+                  "body/messageBody": "<p>Hi @{outputs('Get_reporter')?['body/firstname']}, @{if(equals(triggerBody()?['text_1'], 'released'), concat('🚀 ', variables('Story'), ' is live in release <b>', triggerBody()?['text_2'], '</b>: <a href=\"', triggerBody()?['text_3'], '\">', triggerBody()?['text_3'], '</a>'), concat('🧑‍💻 ', variables('Story'), ' has been routed to the development team: our agents only deliver simple, low-risk changes on their own. Reason: ', coalesce(outputs('Get_story')?['body/cgk_triagerationale'], '-'), ' You will get a message when it is live.'))}</p>"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
             },
-            "authentication": "@parameters('$authentication')"
+            "Log_notified": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "cgk_agentactivities",
+                  "item/cgk_name": "Reporter notified in Teams",
+                  "item/cgk_action": "Notify reporter",
+                  "item/cgk_agent": "@if(equals(triggerBody()?['text_1'], 'released'), 766630004, 766630001)",
+                  "item/cgk_outcome": 766630003,
+                  "item/cgk_details": "Teams message sent to @{outputs('Get_reporter')?['body/internalemailaddress']} (@{triggerBody()?['text_1']}).",
+                  "item/cgk_timestamp": "@utcNow()",
+                  "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerBody()?['text']})"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Post_Teams_message": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Log_notify_failed": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "cgk_agentactivities",
+                  "item/cgk_name": "Reporter not notified",
+                  "item/cgk_action": "Notify reporter",
+                  "item/cgk_agent": "@if(equals(triggerBody()?['text_1'], 'released'), 766630004, 766630001)",
+                  "item/cgk_outcome": 766630001,
+                  "item/cgk_details": "The Teams message could not be sent. Check the Teams connection on F4 – Notify reporter.",
+                  "item/cgk_timestamp": "@utcNow()",
+                  "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerBody()?['text']})"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Post_Teams_message": [
+                  "Failed",
+                  "TimedOut"
+                ]
+              }
+            }
           },
-          "runAfter": {
-            "Post_Teams_message": [
-              "Failed",
-              "TimedOut"
-            ]
+          "else": {
+            "actions": {}
           }
         },
         "Respond": {
           "type": "Response",
           "kind": "PowerApp",
           "runAfter": {
-            "Log_notified": [
+            "Has_reporter": [
               "Succeeded",
-              "Skipped"
-            ],
-            "Log_notify_failed": [
-              "Succeeded",
+              "Failed",
               "Skipped"
             ]
           },

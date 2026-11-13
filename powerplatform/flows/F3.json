@@ -374,8 +374,9 @@
                         },
                         "body": {
                           "text": "@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']}",
-                          "text_1": "@{triggerBody()?['version']}",
-                          "text_2": "@{coalesce(triggerBody()?['deployUrl'], parameters('Portal URL (cgk_PortalUrl)'))}"
+                          "text_1": "released",
+                          "text_2": "@{triggerBody()?['version']}",
+                          "text_3": "@{coalesce(triggerBody()?['deployUrl'], parameters('Portal URL (cgk_PortalUrl)'))}"
                         }
                       },
                       "runAfter": {

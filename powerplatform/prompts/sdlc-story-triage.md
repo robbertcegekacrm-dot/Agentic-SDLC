@@ -35,7 +35,9 @@ Rules
 - complexity: "Simple" only when the change is isolated to one file or function and has no authentication, security or
   data model impact. Otherwise "Complex".
 - risk: "High" for anything touching authentication, login, sessions, payments, data deletion or permissions.
-  "Medium" for calculation logic used in many places or external integrations. Otherwise "Low".
+  "Medium" for changes to calculation formulas or logic shared across several pages, or for external integrations.
+  "Low" for changing a single constant, rate, text or label (for example the VAT percentage or a button text),
+  even when that value is used in a calculation. Otherwise "Low".
 - confidence: whole number 0-100 for how sure you are about this triage.
 - rationale: 1-2 sentences explaining complexity and risk.
 - duplicateOfTitle: the exact title (without number) of an open story that describes the same thing, or "" when none.
@@ -50,5 +52,6 @@ Expected outcome for the demo stories:
 |---|---|---|---|---|
 | "Requets quote" button typo | Issue | Simple | Low | Autonomous |
 | VAT 12% instead of 21% | Issue | Simple | Low | Autonomous |
+| VAT should be 18% (rate change) | Issue | Simple | Low | Autonomous |
 | Print quote button | New feature | Simple | Low | Autonomous |
 | Session expires right after login | Issue | Complex | High | Human |

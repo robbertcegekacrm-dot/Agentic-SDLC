@@ -54,7 +54,7 @@ const childTrigger = (inputs) => ({
     schema: {
       type: 'object',
       properties: Object.fromEntries(inputs.map(([key, title]) => [key, { title, type: 'string', 'x-ms-dynamically-added': true, description: title, 'x-ms-content-hint': 'TEXT' }])),
-      required: inputs.map(([k]) => k),
+      required: inputs.filter(([, , optional]) => !optional).map(([k]) => k),
     },
   },
 });
@@ -139,6 +139,7 @@ function f1(promptId) {
           Route_to_human: update(id, { statecode: 1, statuscode: STATUS['Routed to human'] }),
           Log_routed: logActivity(id, 'Human', 'Warning', 'Routed to human', 'Apply delivery rule',
             `Autonomous rule not met (needs type Issue, Improvement or New feature, complexity Simple, risk Low and confidence >= 80). Triage: @{${tr('type')}}, @{${tr('complexity')}}, risk @{${tr('risk')}}, confidence @{${tr('confidence')}}%.`, after('Route_to_human')),
+          Notify_reporter: runChild('F4', { text: id, text_1: 'routed' }, after('Log_routed')),
         },
       },
     },
@@ -192,7 +193,7 @@ function f2() {
         type: 'If', runAfter: { Assign_Copilot: ['Succeeded', 'Failed', 'TimedOut'], Update_story: ['Succeeded'] },
         expression: { and: [{ equals: ["@outputs('Assign_Copilot')?['statusCode']", 201] }, { greater: ["@length(coalesce(body('Assign_Copilot')?['assignees'], json('[]')))", 0] }] },
         actions: { Log_build: logActivity(id, 'Build', 'Success', `GitHub issue #@{${num}} created`, 'Create issue and assign Copilot', `[@{${s('cgk_storynumber')}}] assigned to the Copilot coding agent: @{body('Create_GitHub_issue')?['html_url']}`) },
-        else: { actions: { Log_build_warning: logActivity(id, 'Build', 'Warning', `GitHub issue #@{${num}} created, Copilot not assigned`, 'Create issue and assign Copilot', `Copilot could not be assigned automatically (HTTP @{outputs('Assign_Copilot')?['statusCode']}). Presenter: assign the issue to Copilot in GitHub: @{body('Create_GitHub_issue')?['html_url']}`) } },
+        else: { actions: { Log_build_warning: logActivity(id, 'Build', 'Warning', `GitHub issue #@{${num}} created, Copilot not assigned`, 'Create issue and assign Copilot', `Copilot could not be assigned automatically (HTTP @{outputs('Assign_Copilot')?['statusCode']}: @{body('Assign_Copilot')?['message']}). Presenter: assign the issue to Copilot in GitHub: @{body('Create_GitHub_issue')?['html_url']}`) } },
       },
       Log_github_failed: logActivity(id, 'Build', 'Failed', 'GitHub issue not created', 'Create GitHub issue', "GitHub returned @{outputs('Create_GitHub_issue')?['statusCode']}. Check the GitHub PAT environment variable.", after('Create_GitHub_issue', ['Failed', 'TimedOut'])),
       Respond: respondFlow({ issuenumber: `@{${num}}` }, { Copilot_assigned: ['Succeeded', 'Failed', 'Skipped'], Log_github_failed: ['Succeeded', 'Skipped'] }),
@@ -249,7 +250,7 @@ function f3() {
           cgk_commitsha: `@{${b('commitSha')}}`, cgk_testresult: V.testresult.Passed,
         }, after('If_new_release')),
         Release_log: logActivity(sid, 'Release', 'Success', `Deployed in release @{${b('version')}}`, 'Deploy to GitHub Pages', `Live at @{${b('deployUrl')}} (release @{${b('version')}}).`, after('Release_story')),
-        Notify_reporter: runChild('F4', { text: sid, text_1: `@{${b('version')}}`, text_2: `@{coalesce(${b('deployUrl')}, parameters('Portal URL (cgk_PortalUrl)'))}` }, after('Release_log')),
+        Notify_reporter: runChild('F4', { text: sid, text_1: 'released', text_2: `@{${b('version')}}`, text_3: `@{coalesce(${b('deployUrl')}, parameters('Portal URL (cgk_PortalUrl)'))}` }, after('Release_log')),
       },
     },
   };
@@ -278,29 +279,42 @@ function f3() {
 }
 
 // ---------- F4 – Notify reporter ----------
+// Child flow called by F3 (event "released": story is live) and F1 (event "routed": story needs a human).
 function f4() {
   const id = "@triggerBody()?['text']";
   const s = (k) => `outputs('Get_story')?['body/${k}']`;
+  const released = "equals(triggerBody()?['text_1'], 'released')";
+  const story = `<b>@{${s('cgk_storynumber')}}</b> "@{${s('cgk_title')}}"`;
+  const message = `@{if(${released}, concat('🚀 ', variables('Story'), ' is live in release <b>', triggerBody()?['text_2'], '</b>: <a href="', triggerBody()?['text_3'], '">', triggerBody()?['text_3'], '</a>'), concat('🧑‍💻 ', variables('Story'), ' has been routed to the development team: our agents only deliver simple, low-risk changes on their own. Reason: ', coalesce(${s('cgk_triagerationale')}, '-'), ' You will get a message when it is live.'))}`;
+  const agent = `@if(${released}, ${V.agent.Release}, ${V.agent.Triage})`;
+  const withAgent = (a) => { a.inputs.parameters['item/cgk_agent'] = agent; return a; };
   return wrap({
-    triggers: { manual: childTrigger([['text', 'storyId'], ['text_1', 'version'], ['text_2', 'deployUrl']]) },
+    triggers: { manual: childTrigger([['text', 'storyId'], ['text_1', 'event (released or routed)'], ['text_2', 'version', true], ['text_3', 'deployUrl', true]]) },
     actions: {
-      Get_story: getRow('cgk_sdlcstories', id, 'cgk_storynumber,cgk_title,_cgk_reportedby_value'),
-      Get_reporter: getRow('systemusers', `@{${s('_cgk_reportedby_value')}}`, 'internalemailaddress,firstname', after('Get_story')),
-      Post_Teams_message: {
-        type: 'OpenApiConnection', runAfter: after('Get_reporter'),
-        inputs: {
-          host: host(TEAMS, 'PostMessageToConversation'),
-          parameters: {
-            poster: 'Flow bot', location: 'Chat with Flow bot',
-            'body/recipient': "@{outputs('Get_reporter')?['body/internalemailaddress']}",
-            'body/messageBody': `<p>Hi @{outputs('Get_reporter')?['body/firstname']}, 🚀 <b>@{${s('cgk_storynumber')}}</b> "@{${s('cgk_title')}}" is live in release <b>@{triggerBody()?['text_1']}</b>: <a href="@{triggerBody()?['text_2']}">@{triggerBody()?['text_2']}</a></p>`,
+      Get_story: getRow('cgk_sdlcstories', id, 'cgk_storynumber,cgk_title,cgk_triagerationale,_cgk_reportedby_value'),
+      Story: { type: 'InitializeVariable', runAfter: after('Get_story'), inputs: { variables: [{ name: 'Story', type: 'string', value: story }] } },
+      Has_reporter: {
+        type: 'If', runAfter: after('Story'), expression: { not: { equals: [`@coalesce(${s('_cgk_reportedby_value')}, '')`, ''] } },
+        actions: {
+          Get_reporter: getRow('systemusers', `@{${s('_cgk_reportedby_value')}}`, 'internalemailaddress,firstname'),
+          Post_Teams_message: {
+            type: 'OpenApiConnection', runAfter: after('Get_reporter'),
+            inputs: {
+              host: host(TEAMS, 'PostMessageToConversation'),
+              parameters: {
+                poster: 'Flow bot', location: 'Chat with Flow bot',
+                'body/recipient': "@{outputs('Get_reporter')?['body/internalemailaddress']}",
+                'body/messageBody': `<p>Hi @{outputs('Get_reporter')?['body/firstname']}, ${message}</p>`,
+              },
+              authentication: "@parameters('$authentication')",
+            },
           },
-          authentication: "@parameters('$authentication')",
+          Log_notified: withAgent(logActivity(id, 'Release', 'Info', 'Reporter notified in Teams', 'Notify reporter', `Teams message sent to @{outputs('Get_reporter')?['body/internalemailaddress']} (@{triggerBody()?['text_1']}).`, after('Post_Teams_message'))),
+          Log_notify_failed: withAgent(logActivity(id, 'Release', 'Warning', 'Reporter not notified', 'Notify reporter', 'The Teams message could not be sent. Check the Teams connection on F4 – Notify reporter.', after('Post_Teams_message', ['Failed', 'TimedOut']))),
         },
+        else: { actions: {} },
       },
-      Log_notified: logActivity(id, 'Release', 'Info', 'Reporter notified in Teams', 'Notify reporter', "Teams message sent to @{outputs('Get_reporter')?['body/internalemailaddress']}.", after('Post_Teams_message')),
-      Log_notify_failed: logActivity(id, 'Release', 'Warning', 'Reporter not notified', 'Notify reporter', 'The Teams message could not be sent.', after('Post_Teams_message', ['Failed', 'TimedOut'])),
-      Respond: respondFlow({ notified: "@{if(equals(actions('Post_Teams_message')?['status'], 'Succeeded'), 'yes', 'no')}" }, { Log_notified: ['Succeeded', 'Skipped'], Log_notify_failed: ['Succeeded', 'Skipped'] }),
+      Respond: respondFlow({ notified: "@{if(equals(actions('Post_Teams_message')?['status'], 'Succeeded'), 'yes', 'no')}" }, { Has_reporter: ['Succeeded', 'Failed', 'Skipped'] }),
     },
   }, [DV, TEAMS]);
 }
@@ -368,7 +382,7 @@ function f6() {
 
 const FLOWS = [
   ['F2', 'F2 – Send to GitHub', 'Creates the GitHub issue for an autonomous story and assigns it to the Copilot coding agent.', f2],
-  ['F4', 'F4 – Notify reporter', 'Sends the reporter a Teams message when the story is live.', f4],
+  ['F4', 'F4 – Notify reporter', 'Sends the reporter a Teams message when the story is live or has been routed to a human.', f4],
   ['F1', 'F1 – Story triage', 'Triage Agent: runs the SDLC Story Triage prompt on every new story and decides the delivery path.', f1],
   ['F3', 'F3 – Pipeline callback', 'Receives GitHub Actions events (PR opened, tests, deployed) and updates the story.', f3],
   ['F5', 'F5 – Intake create story', 'Agent flow for the Intake Agent: creates an SDLC story and returns its number.', f5],

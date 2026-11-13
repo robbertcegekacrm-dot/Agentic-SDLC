@@ -356,6 +356,23 @@
                         "Succeeded"
                       ]
                     }
+                  },
+                  "Notify_reporter": {
+                    "type": "Workflow",
+                    "inputs": {
+                      "host": {
+                        "workflowReferenceName": "6ff26d40-4126-511c-ad3d-eee08b2dfe2f"
+                      },
+                      "body": {
+                        "text": "@triggerOutputs()?['body/cgk_sdlcstoryid']",
+                        "text_1": "routed"
+                      }
+                    },
+                    "runAfter": {
+                      "Log_routed": [
+                        "Succeeded"
+                      ]
+                    }
                   }
                 }
               }

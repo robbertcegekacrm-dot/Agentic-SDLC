@@ -244,7 +244,7 @@
                     "item/cgk_action": "Create issue and assign Copilot",
                     "item/cgk_agent": 766630002,
                     "item/cgk_outcome": 766630001,
-                    "item/cgk_details": "Copilot could not be assigned automatically (HTTP @{outputs('Assign_Copilot')?['statusCode']}). Presenter: assign the issue to Copilot in GitHub: @{body('Create_GitHub_issue')?['html_url']}",
+                    "item/cgk_details": "Copilot could not be assigned automatically (HTTP @{outputs('Assign_Copilot')?['statusCode']}: @{body('Assign_Copilot')?['message']}). Presenter: assign the issue to Copilot in GitHub: @{body('Create_GitHub_issue')?['html_url']}",
                     "item/cgk_timestamp": "@utcNow()",
                     "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{triggerBody()?['text']})"
                   },

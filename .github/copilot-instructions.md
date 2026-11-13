@@ -27,4 +27,6 @@ npm run test:e2e   # Playwright smoke tests (builds and serves the app on port 4
 ## Stack
 Vite + vanilla JavaScript, no framework. Pages use hash routing in `app/src/main.js`.
 Quote calculation lives in `app/src/quote.js`, the login session in `app/src/session.js`.
-Styling follows the Cegeka brand: white page, light grey cards, Sea Blue header band, Nunito Sans.
+Marketing copy lives in `app/src/content.js`, icons in `app/src/icons.js`, styles in `app/src/style.css`.
+Styling follows the PowerStudios brand: deep navy, solar amber accent, white, Plus Jakarta Sans, rounded cards.
+Reuse the existing CSS classes (`.btn`, `.btn-primary`, `.card`, `.panel`) for new UI.

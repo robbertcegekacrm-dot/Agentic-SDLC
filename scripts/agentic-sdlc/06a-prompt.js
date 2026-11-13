@@ -2,7 +2,8 @@
 // Web API: model on the GPT prompt template, training configuration with the prompt
 // definition, Train, then PublishAIConfiguration on the resulting run configuration.
 // Prompt text and inputs come from powerplatform/prompts/sdlc-story-triage.md.
-// Writes the model id to prompt-id.txt (used by 06-flows.js). Idempotent: skips when published.
+// Writes the model id to prompt-id.txt (used by 06-flows.js). Idempotent: skips when the published
+// prompt text matches the markdown; otherwise trains and publishes a new version.
 const fs = require('fs');
 const path = require('path');
 const dv = require('./dv');
@@ -42,7 +43,13 @@ const config = {
 (async () => {
   const ex = await dv.get(`msdyn_aimodels?$select=msdyn_aimodelid,statecode,_msdyn_activerunconfigurationid_value&$filter=msdyn_name eq '${NAME}'`);
   let modelId = ex.value[0]?.msdyn_aimodelid;
+  let newVersion = false;
   if (modelId && ex.value[0]._msdyn_activerunconfigurationid_value) {
+    // Published: when the prompt text differs from the markdown source, train and publish a new version below.
+    const active = await dv.get(`msdyn_aiconfigurations(${ex.value[0]._msdyn_activerunconfigurationid_value})?$select=msdyn_customconfiguration`);
+    newVersion = JSON.stringify(JSON.parse(active.msdyn_customconfiguration).prompt) !== JSON.stringify(config.prompt);
+  }
+  if (modelId && ex.value[0]._msdyn_activerunconfigurationid_value && !newVersion) {
     console.log(`= prompt ${NAME} (${modelId}) already published`);
     const sc = await dv.get(`solutioncomponents?$select=componenttype&$filter=objectid eq ${modelId}`);
     if (sc.value.length) await dv.addToSolution(modelId, sc.value[0].componenttype, true).catch((e) => console.log(`  add to solution: ${e.status}`));
@@ -54,16 +61,19 @@ const config = {
     console.log(`+ AI model ${NAME} (${modelId})`);
   }
   // Reuse a trained configuration from an earlier run, else create and train one.
-  const trained = await dv.get(`msdyn_aiconfigurations?$select=msdyn_aiconfigurationid,statuscode&$filter=_msdyn_aimodelid_value eq ${modelId} and msdyn_type eq 190690000`);
-  let train = trained.value[0]?.msdyn_aiconfigurationid;
+  // Only a configuration with the same prompt text as the markdown is reused.
+  const samePrompt = (c) => JSON.stringify(JSON.parse(c.msdyn_customconfiguration).prompt) === JSON.stringify(config.prompt);
+  const trained = await dv.get(`msdyn_aiconfigurations?$select=msdyn_aiconfigurationid,statuscode,msdyn_customconfiguration&$filter=_msdyn_aimodelid_value eq ${modelId} and msdyn_type eq 190690000`);
+  const reuseTrain = trained.value.find(samePrompt);
+  let train = reuseTrain?.msdyn_aiconfigurationid;
   if (!train) {
     train = (await dv.post('msdyn_aiconfigurations', {
-      msdyn_name: `${modelId}_Training`, msdyn_type: 190690000, msdyn_customconfiguration: JSON.stringify(config),
+      msdyn_name: `${modelId}_Training${newVersion ? `_${trained.value.length + 1}` : ''}`, msdyn_type: 190690000, msdyn_customconfiguration: JSON.stringify(config),
       'msdyn_AIModelId@odata.bind': `/msdyn_aimodels(${modelId})`,
     })).__id;
     console.log(`+ training configuration ${train}`);
   }
-  if (trained.value[0]?.statuscode !== 6) {
+  if (reuseTrain?.statuscode !== 6) {
     await dv.post(`msdyn_aiconfigurations(${train})/Microsoft.Dynamics.CRM.Train`, { version: '1.0' }, { solution: false });
     for (let i = 0; i < 30; i++) {
       await dv.sleep(4000);
@@ -72,21 +82,34 @@ const config = {
     console.log('  trained');
   }
   // Run configuration pointing to the trained configuration, then publish it (activates the model).
-  const runs = await dv.get(`msdyn_aiconfigurations?$select=msdyn_aiconfigurationid&$filter=_msdyn_aimodelid_value eq ${modelId} and msdyn_type eq 190690001`);
-  let run = runs.value[0]?.msdyn_aiconfigurationid;
+  const runs = await dv.get(`msdyn_aiconfigurations?$select=msdyn_aiconfigurationid,msdyn_customconfiguration&$filter=_msdyn_aimodelid_value eq ${modelId} and msdyn_type eq 190690001`);
+  let run = runs.value.find(samePrompt)?.msdyn_aiconfigurationid;
   if (!run) {
     run = (await dv.post('msdyn_aiconfigurations', {
-      msdyn_name: `${modelId}_Run`, msdyn_type: 190690001, msdyn_customconfiguration: JSON.stringify(config),
+      msdyn_name: `${modelId}_Run${newVersion ? `_${runs.value.length + 1}` : ''}`, msdyn_type: 190690001, msdyn_customconfiguration: JSON.stringify(config),
       'msdyn_AIModelId@odata.bind': `/msdyn_aimodels(${modelId})`,
       'msdyn_TrainedModelAIConfigurationPareId@odata.bind': `/msdyn_aiconfigurations(${train})`,
     })).__id;
     console.log(`+ run configuration ${run}`);
   }
+  // Only one run configuration can be published: unpublish the previous version first.
+  if (newVersion) {
+    const prev = ex.value[0]._msdyn_activerunconfigurationid_value;
+    const prevState = async () => (await dv.get(`msdyn_aiconfigurations(${prev})?$select=statuscode`)).statuscode;
+    if (await prevState() === 7) await dv.post(`msdyn_aiconfigurations(${prev})/Microsoft.Dynamics.CRM.UnpublishAIConfiguration`, { version: '1.0' }, { solution: false });
+    for (let i = 0; i < 30 && [7, 8].includes(await prevState()); i++) await dv.sleep(4000); // wait until unpublished
+    for (let i = 0; i < 30; i++) {
+      const m = await dv.get(`msdyn_aimodels(${modelId})?$select=_msdyn_activerunconfigurationid_value`);
+      if (m._msdyn_activerunconfigurationid_value !== prev) break;
+      await dv.sleep(4000);
+    }
+    console.log('  previous version unpublished');
+  }
   await dv.post(`msdyn_aiconfigurations(${run})/Microsoft.Dynamics.CRM.PublishAIConfiguration`, { version: '1.0' }, { solution: false });
   for (let i = 0; i < 30; i++) {
     await dv.sleep(5000);
     const m = await dv.get(`msdyn_aimodels(${modelId})?$select=_msdyn_activerunconfigurationid_value,statecode`);
-    if (m._msdyn_activerunconfigurationid_value) { console.log(`  published (state ${m.statecode})`); break; }
+    if (m._msdyn_activerunconfigurationid_value === run) { console.log(`  published (state ${m.statecode})`); break; }
   }
   // Add to the solution with the component type the model has in the Default solution.
   const sc = await dv.get(`solutioncomponents?$select=componenttype&$filter=objectid eq ${modelId}`);

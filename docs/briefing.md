@@ -130,7 +130,7 @@ Question → Human (or answered by Intake agent).
 
 ## 4. Power Automate flows (in solution, solution-aware connection references)
 **F1 – Story triage** (trigger: SDLC Story created): status Triaging → run prompt → write fields → Triaged →
-log → if Autonomous call F2, else Routed to human + log reason.
+log → if Autonomous call F2, else Routed to human + log reason + call F4 (reporter hears it went to a human).
 
 **F2 – Send to GitHub**: create GitHub issue `[STY-xxxx] <title>` with type, description, rationale,
 acceptance criteria and "Include STY-xxxx in the PR title. Only change files under /app."
@@ -147,7 +147,9 @@ Assign to Copilot via HTTP (GitHub REST, assignee `copilot-swe-agent`, PAT from 
 - tests_failed → Failed; In development; log Test (Warning)
 - deployed → create/reuse Release; link story; Released; Resolved on; Lead time; log Release; call F4
 
-**F4 – Notify reporter**: Teams message "STY-xxxx is live in release x.y.z: <url>".
+**F4 – Notify reporter** (child flow, called by F3 and F1): Teams message to the reporter.
+- released → "STY-xxxx is live in release x.y.z: <url>"
+- routed → "STY-xxxx has been routed to the development team … Reason: <triage rationale>. You will get a message when it is live."
 
 Environment variables (CGK prefix): GitHub owner, GitHub repo, GitHub PAT (Text, no default value).
 
