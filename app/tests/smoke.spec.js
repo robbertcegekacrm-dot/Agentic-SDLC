@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { calculateQuote, formatEuro } from '../src/quote.js';
 
 test('home page loads with hero and release number', async ({ page }) => {
   await page.goto('./');
@@ -22,6 +23,8 @@ test('quote calculator shows a live total', async ({ page }) => {
   await page.goto('./#/quote');
   const summary = page.locator('.result');
   await expect(summary).toContainText('Total');
+  const vat = summary.locator('.line').filter({ hasText: 'VAT (18%)' });
+  await expect(vat.locator('span').nth(1)).toHaveText(formatEuro(calculateQuote({ product: 'panel', quantity: 10 }).vat));
   const before = await summary.locator('.total').textContent();
   await page.getByRole('button', { name: 'Increase quantity' }).click();
   await expect(summary.locator('.total')).not.toHaveText(before);
