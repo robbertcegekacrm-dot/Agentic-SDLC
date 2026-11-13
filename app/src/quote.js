@@ -1,4 +1,4 @@
-export const VAT_RATE = 0.18;
+export const VAT_RATE = 0.12;
 
 export const PRODUCTS = [
   { id: 'panel', name: 'Solar panel 430 Wp', price: 210, unit: 'per panel', icon: 'panel', blurb: 'Full-black monocrystalline panel, 25-year product warranty.' },
