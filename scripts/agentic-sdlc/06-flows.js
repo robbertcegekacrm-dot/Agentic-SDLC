@@ -206,7 +206,7 @@ function f3() {
   const b = (k) => `triggerBody()?['${k}']`;
   const sid = "@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']}";
   const ref = "@{first(outputs('Find_story')?['body/value'])?['cgk_storynumber']}";
-  const filter = `@{concat('cgk_storynumber eq ''', coalesce(${b('storyRef')}, '-'), '''', if(empty(${b('githubIssue')}), '', concat(' or cgk_githubissuenumber eq ', string(${b('githubIssue')}))))}`;
+  const filter = `@{concat('cgk_storynumber eq ''', coalesce(${b('storyRef')}, '-'), '''', if(equals(string(coalesce(${b('githubIssue')}, '')), ''), '', concat(' or cgk_githubissuenumber eq ', string(${b('githubIssue')}))))}`;
   const relId = "@{if(empty(outputs('Find_release')?['body/value']), outputs('Create_release')?['body/cgk_releaseid'], first(outputs('Find_release')?['body/value'])?['cgk_releaseid'])}";
   const cases = {
     pr_opened: {

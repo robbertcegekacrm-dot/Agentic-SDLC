@@ -77,7 +77,7 @@
             "parameters": {
               "entityName": "cgk_sdlcstories",
               "$select": "cgk_sdlcstoryid,cgk_storynumber,createdon",
-              "$filter": "@{concat('cgk_storynumber eq ''', coalesce(triggerBody()?['storyRef'], '-'), '''', if(empty(triggerBody()?['githubIssue']), '', concat(' or cgk_githubissuenumber eq ', string(triggerBody()?['githubIssue']))))}",
+              "$filter": "@{concat('cgk_storynumber eq ''', coalesce(triggerBody()?['storyRef'], '-'), '''', if(equals(string(coalesce(triggerBody()?['githubIssue'], '')), ''), '', concat(' or cgk_githubissuenumber eq ', string(triggerBody()?['githubIssue']))))}",
               "$top": 1
             },
             "authentication": "@parameters('$authentication')"
