@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PRODUCTS, VAT_RATE, calculateQuote } from './quote.js';
+import { PRODUCTS, EXTRAS, VAT_RATE, calculateQuote } from './quote.js';
 
 describe('calculateQuote', () => {
   it('calculates the subtotal from price and quantity', () => {
@@ -30,5 +30,16 @@ describe('calculateQuote', () => {
 
   it('has a price for every product', () => {
     PRODUCTS.forEach((p) => expect(p.price).toBeGreaterThan(0));
+  });
+
+  it('adds per-unit and one-off extras to the subtotal', () => {
+    const q = calculateQuote({ product: 'panel', quantity: 10, extras: ['install', 'monitoring'] });
+    expect(q.lines).toHaveLength(3);
+    expect(q.subtotal).toBe(2100 + 650 + 149);
+  });
+
+  it('ignores unknown extras and has a price for every extra', () => {
+    expect(calculateQuote({ product: 'panel', quantity: 1, extras: ['unicorn'] }).subtotal).toBe(210);
+    EXTRAS.forEach((e) => expect(e.price).toBeGreaterThan(0));
   });
 });

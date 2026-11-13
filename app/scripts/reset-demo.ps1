@@ -1,4 +1,6 @@
-# Restores the demo start state of the portal in a new commit.
+# Restores the demo start state of the portal (PowerStudios site, release 1.1.0 design) in a new commit:
+# 'Requets quote' typo, VAT computed at 12% under a 'VAT (21%)' label, session expiring right after login,
+# and no print button on the quote.
 # The version in package.json is kept, so release numbers keep going up.
 $ErrorActionPreference = 'Stop'
 $appDir = Split-Path -Parent $PSScriptRoot
@@ -17,6 +19,17 @@ try {
             Remove-Item $_.FullName -Force
         }
     }
+
+    # Sanity check: the seeded defects must be back.
+    $main = Get-Content src/main.js -Raw
+    $checks = @(
+        @{ Ok = $main.Contains('Requets quote'); Msg = "'Requets quote' typo missing in src/main.js" },
+        @{ Ok = $main.Contains('VAT (21%)'); Msg = "'VAT (21%)' label missing in src/main.js" },
+        @{ Ok = (Get-Content src/quote.js -Raw).Contains('VAT_RATE = 0.12'); Msg = 'VAT_RATE 0.12 missing in src/quote.js' },
+        @{ Ok = (Get-Content src/session.js -Raw).Contains('Math.floor(Date.now() / 1000)'); Msg = 'session bug missing in src/session.js' },
+        @{ Ok = -not $main.Contains('window.print'); Msg = 'print button still present in src/main.js' }
+    )
+    foreach ($c in $checks) { if (-not $c.Ok) { throw "Seed check failed: $($c.Msg)" } }
 
     git add -A src tests
     git diff --cached --quiet

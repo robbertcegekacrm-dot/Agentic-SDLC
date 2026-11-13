@@ -3,25 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PowerStudios Customer Portal</title>
+    <title>PowerStudios · Solar energy in Limburg</title>
+    <meta name="description" content="PowerStudios designs and installs solar panels, inverters, home batteries and EV chargers in Hasselt and the rest of Limburg." />
+    <meta name="theme-color" content="#0B1F3A" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='7' fill='%23FFB81C'/%3E%3Cg stroke='%23FFB81C' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M16 2.5v3.5M16 26v3.5M2.5 16h3.5M26 16h3.5M6.5 6.5l2.5 2.5M23 23l2.5 2.5M6.5 25.5L9 23M23 9l2.5-2.5'/%3E%3C/g%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <header class="band">
-      <div class="wrap">
-        <a class="brand" href="#/">PowerStudios</a>
-        <nav>
-          <a href="#/">Home</a>
-          <a href="#/quote">Quote calculator</a>
-          <a href="#/login">Login</a>
+    <a class="skip-link" href="#app">Skip to content</a>
+    <header class="site-header" id="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#/" aria-label="PowerStudios home"><span id="logo"></span><span class="brand-name">Power<b>Studios</b></span></a>
+        <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"></button>
+        <nav class="site-nav" id="site-nav" aria-label="Main">
+          <a href="#/" data-route="/">Home</a>
+          <a href="#/solutions" data-route="/solutions">Solutions</a>
+          <a href="#/quote" data-route="/quote">Quote calculator</a>
+          <a href="#/projects" data-route="/projects">Projects</a>
+          <a href="#/login" data-route="/login">Login</a>
+          <a class="btn btn-primary btn-sm header-cta" href="#/quote">Get a quote</a>
         </nav>
       </div>
     </header>
-    <main class="wrap" id="app"></main>
-    <footer class="wrap">
-      PowerStudios · Hasselt, Belgium · <span id="version"></span>
+    <main id="app" tabindex="-1"></main>
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-about">
+          <a class="brand" href="#/"><span id="footer-logo"></span><span class="brand-name">Power<b>Studios</b></span></a>
+          <p>Solar panels, batteries and EV chargers for homes and businesses in Limburg. Designed, installed and maintained by our own team.</p>
+        </div>
+        <div>
+          <h3>Solutions</h3>
+          <ul>
+            <li><a href="#/solutions">Solar panels</a></li>
+            <li><a href="#/solutions">Inverters</a></li>
+            <li><a href="#/solutions">Home batteries</a></li>
+            <li><a href="#/solutions">EV chargers</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#/projects">Projects</a></li>
+            <li><a href="#/quote">Quote calculator</a></li>
+            <li><a href="#/login">Customer login</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <ul class="contact">
+            <li>Zonnestraat 12, 3500 Hasselt, Belgium</li>
+            <li>+32 11 00 00 00</li>
+            <li>hello@powerstudios.example</li>
+          </ul>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>© PowerStudios BV · Hasselt, Limburg · A fictional company for demo purposes</span>
+        <span id="version"></span>
+      </div>
     </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
