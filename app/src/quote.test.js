@@ -18,11 +18,11 @@ describe('calculateQuote', () => {
     expect(VAT_RATE).toBeLessThan(1);
   });
 
-  it('uses 18% VAT for the calculated VAT and total', () => {
+  it('uses 12% VAT for the calculated VAT and total', () => {
     const q = calculateQuote({ product: 'panel', quantity: 10 });
-    expect(VAT_RATE).toBe(0.18);
-    expect(q.vat).toBe(378);
-    expect(q.total).toBe(2478);
+    expect(VAT_RATE).toBe(0.12);
+    expect(q.vat).toBe(252);
+    expect(q.total).toBe(2352);
   });
 
   it('treats invalid quantities as zero', () => {
