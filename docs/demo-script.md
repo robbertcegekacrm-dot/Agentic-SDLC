@@ -37,6 +37,9 @@ illustrative.)
 CI posts *pr_opened* → status Testing, then *tests_passed* → **Awaiting approval**. On the story, command
 **Approve release** opens the PR. Review the diff (VAT_RATE 0.12 → 0.21, new test, version 1.1.1), approve and merge.
 Talking point: production stays human-in-the-loop.
+Variant with `AUTO_MERGE=true` (manual steps 5b): after *tests_passed* the CI job merges by itself and the story
+shows *Auto-merged* (Release). Talking point: simple, low-risk changes ship on their own; anything else waits for a
+developer.
 
 ## 5. Deploy → released (3 min)
 Actions → Deploy portal → *deployed* callback: story **Released**, Release 1.0.7 created, lead time filled,

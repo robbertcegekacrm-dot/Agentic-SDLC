@@ -39,6 +39,18 @@ For F2 and F4 (child flows): Details → *Run only users* → set each connectio
 1. Open **F3 – Pipeline callback** → trigger *When an HTTP request is received* → copy the HTTP URL.
 2. GitHub → repo → Settings → Secrets and variables → Actions → New repository secret `PA_CALLBACK_URL` = that URL.
 
+## 5b. Optional: hands-off merge (AUTO_MERGE)
+By default a human approves and merges Copilot's PR (demo step 4). To let low-risk stories ship on their own:
+1. GitHub → repo → Settings → Secrets and variables → Actions → **Variables** → New repository variable
+   `AUTO_MERGE` = `true` (delete it or set `false` to go back to human approval).
+2. GitHub → repo → Settings → Copilot → **Coding agent**: if the option to run Actions workflows on Copilot's PRs
+   without approval exists, turn it on. Otherwise you still click **Approve and run workflows** once per PR.
+
+The CI job `auto-merge` then merges when all of these hold: the PR is by Copilot, Copilot has finished
+(`copilot_work_finished`), tests passed, and the linked issue has the `agentic-sdlc` label (only F2 creates those, and
+F2 only runs on the autonomous path). It marks the draft PR ready, squash-merges, starts **Deploy portal** and posts
+`auto_merged` to F3 (activity *Auto-merged* on the story). Branch protection on `main` must not require a review.
+
 ## 6. Publish the Intake Agent
 The agent, its instructions and all topics are created by `07-agent.sh`; publishing failed with a 409 because
 F5/F6 were still off.

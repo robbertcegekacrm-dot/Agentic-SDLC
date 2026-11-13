@@ -252,6 +252,33 @@
                     }
                   }
                 },
+                "auto_merged": {
+                  "case": "auto_merged",
+                  "actions": {
+                    "Merged_log": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "cgk_agentactivities",
+                          "item/cgk_name": "Auto-merged",
+                          "item/cgk_action": "Merge pull request",
+                          "item/cgk_agent": 766630004,
+                          "item/cgk_outcome": 766630000,
+                          "item/cgk_details": "Autonomous path (simple, low risk) and CI passed: @{triggerBody()?['prUrl']} merged without human approval. Deploying.",
+                          "item/cgk_timestamp": "@utcNow()",
+                          "item/cgk_SDLCStory@odata.bind": "cgk_sdlcstories(@{first(outputs('Find_story')?['body/value'])?['cgk_sdlcstoryid']})"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                },
                 "deployed": {
                   "case": "deployed",
                   "actions": {

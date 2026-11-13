@@ -2,6 +2,8 @@ name: CI
 
 on:
   pull_request:
+    # review_requested: Copilot requests a review when it has finished; that run can auto-merge.
+    types: [opened, synchronize, reopened, ready_for_review, review_requested]
     paths:
       - 'app/**'
 
@@ -17,6 +19,9 @@ defaults:
 jobs:
   test:
     runs-on: ubuntu-latest
+    outputs:
+      story: ${{ steps.ref.outputs.story }}
+      issue: ${{ steps.ref.outputs.issue }}
     env:
       PA_CALLBACK_URL: ${{ secrets.PA_CALLBACK_URL }}
       GH_TOKEN: ${{ github.token }}
@@ -38,6 +43,7 @@ jobs:
         run: npm ci
 
       - name: Determine story reference
+        id: ref
         run: |
           sty() { grep -oE 'STY-[0-9]+' | head -n1 || true; }
           story=$(printf '%s' "$PR_TITLE" | sty)
@@ -50,6 +56,8 @@ jobs:
           echo "Story: ${story:-none}, issue: ${issue:-none}"
           echo "STORY_REF=$story" >> "$GITHUB_ENV"
           echo "GITHUB_ISSUE=${issue:-null}" >> "$GITHUB_ENV"
+          echo "story=$story" >> "$GITHUB_OUTPUT"
+          echo "issue=$issue" >> "$GITHUB_OUTPUT"
           echo "APP_VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
           cat > "$RUNNER_TEMP/notify.sh" <<'SCRIPT'
           notify() {
@@ -87,3 +95,64 @@ jobs:
         run: |
           echo "::error::Tests failed"
           exit 1
+
+  # Merges Copilot's PR without a human when the repository variable AUTO_MERGE is 'true', the tests passed,
+  # Copilot has finished working and the linked issue carries the 'agentic-sdlc' label (only F2 creates those, and
+  # F2 only runs for stories triage marked Autonomous: simple, low risk, confidence >= 80).
+  auto-merge:
+    needs: test
+    if: vars.AUTO_MERGE == 'true' && github.event.pull_request.user.login == 'Copilot'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+      issues: read
+    defaults:
+      run:
+        working-directory: .
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      PA_CALLBACK_URL: ${{ secrets.PA_CALLBACK_URL }}
+      PR: ${{ github.event.pull_request.number }}
+      PR_URL: ${{ github.event.pull_request.html_url }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      STORY_REF: ${{ needs.test.outputs.story }}
+      ISSUE: ${{ needs.test.outputs.issue }}
+    steps:
+      - name: Check merge conditions
+        id: check
+        run: |
+          skip() { echo "::notice::Auto-merge skipped: $1"; echo "go=false" >> "$GITHUB_OUTPUT"; exit 0; }
+          [ -n "$STORY_REF" ] || skip "no STY reference"
+          last=$(gh api "repos/$GH_REPO/issues/$PR/timeline?per_page=100" --paginate \
+            --jq '.[] | select(.event == "copilot_work_started" or .event == "copilot_work_finished") | .event' | tail -n1)
+          [ "$last" = "copilot_work_finished" ] || skip "Copilot is still working"
+          if [ -z "$ISSUE" ]; then
+            ISSUE=$(gh api "repos/$GH_REPO/issues?labels=agentic-sdlc&state=all&per_page=100" \
+              --jq "[.[] | select(.pull_request == null) | select(.title | contains(\"[$STORY_REF]\"))][0].number // empty")
+          fi
+          [ -n "$ISSUE" ] || skip "no linked GitHub issue for $STORY_REF"
+          labels=$(gh api "repos/$GH_REPO/issues/$ISSUE" --jq '[.labels[].name] | join(",")')
+          [[ ",$labels," == *",agentic-sdlc,"* ]] || skip "issue #$ISSUE is not on the autonomous path"
+          echo "issue=$ISSUE" >> "$GITHUB_OUTPUT"
+          echo "go=true" >> "$GITHUB_OUTPUT"
+
+      - name: Merge and deploy
+        if: steps.check.outputs.go == 'true'
+        env:
+          ISSUE: ${{ steps.check.outputs.issue }}
+        run: |
+          [ "$(gh pr view "$PR" --json isDraft --jq .isDraft)" = "true" ] && gh pr ready "$PR"
+          gh pr merge "$PR" --squash --delete-branch --match-head-commit "$HEAD_SHA" \
+            --body "Auto-merged: $STORY_REF is on the autonomous path (low risk) and CI passed."
+          # A merge made with GITHUB_TOKEN does not trigger the push workflow, so start the deploy explicitly.
+          gh workflow run deploy.yml --ref main
+          if [ -n "$PA_CALLBACK_URL" ]; then
+            payload=$(jq -n --arg storyRef "$STORY_REF" --argjson githubIssue "$ISSUE" --arg prUrl "$PR_URL" \
+              --arg commitSha "$HEAD_SHA" '{storyRef: $storyRef, githubIssue: $githubIssue, event: "auto_merged",
+              prUrl: $prUrl, commitSha: $commitSha, version: "", deployUrl: ""}')
+            curl -sS --fail-with-body --retry 2 -X POST -H 'Content-Type: application/json' \
+              -d "$payload" "$PA_CALLBACK_URL" || echo "::warning::Callback 'auto_merged' failed"
+          fi

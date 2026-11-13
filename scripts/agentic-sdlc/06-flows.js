@@ -230,6 +230,13 @@ function f3() {
         Failed_log: logActivity(sid, 'Test', 'Warning', 'Tests failed', 'Run CI tests', `CI tests failed on @{${b('commitSha')}}. Back to development.`, after('Failed_update')),
       },
     },
+    auto_merged: {
+      case: 'auto_merged',
+      actions: {
+        Merged_log: logActivity(sid, 'Release', 'Success', 'Auto-merged', 'Merge pull request',
+          `Autonomous path (simple, low risk) and CI passed: @{${b('prUrl')}} merged without human approval. Deploying.`),
+      },
+    },
     deployed: {
       case: 'deployed',
       actions: {
